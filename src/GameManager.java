@@ -20,6 +20,7 @@ public class GameManager
     //             Lists of Objects
     //
     // ==========================================
+    private RoadMap rm;
     private ArrayList<GameObject> gameObjects;
 
     public GameManager(int inputWidth, int inputHeight)
@@ -31,8 +32,8 @@ public class GameManager
         diagonalScrollSpeed = scrollSpeed / Math.sqrt(2);
 
         gameObjects = new ArrayList<GameObject>();
-        gameObjects.add(new Vehicle(this,
-                new Point(width/2, height/2), 5, 5, Color.CYAN));
+        rm = new RoadMap(this, new Point(0,0));
+        gameObjects.add(rm);
     }
 
     public void tick()
@@ -79,6 +80,10 @@ public class GameManager
     public ScrollDirection getScrollDirection()
     {
         return scrollDirection;
+    }
+    public RoadMap getRM()
+    {
+        return this.rm;
     }
 
     // ==========================================
