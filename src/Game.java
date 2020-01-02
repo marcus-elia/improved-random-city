@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Game extends Canvas implements Runnable
 {
-    public static final int WIDTH = 324, HEIGHT = 572;
+    public static final int WIDTH = 512, HEIGHT = 512;
     private Thread thread;
     private boolean running = false;
 
@@ -18,7 +18,7 @@ public class Game extends Canvas implements Runnable
 
     public Game()
     {
-        gameManager = new GameManager(WIDTH, HEIGHT - 40 - 20);
+        gameManager = new GameManager(WIDTH, HEIGHT);
         //this.addKeyListener(new KeyInput(gameManager));
         //this.addMouseMotionListener(new MouseMotionInput(gameManager));
         //this.addMouseListener(new MouseInput(gameManager));
@@ -93,10 +93,8 @@ public class Game extends Canvas implements Runnable
         Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
 
 
-        /*g2d.setColor(Color.gray);
-        g2d.fillRect((int)gameManager.getTopLeftRenderCorner().x, (int)gameManager.getTopLeftRenderCorner().y,
-                gameManager.getRenderRectXSize(), gameManager.getRenderRectYSize());
-        g2d.fillRect(0, HEIGHT - 60, WIDTH, 60);*/
+        g2d.setColor(Color.gray);
+        g2d.fillRect(0, 0, WIDTH, HEIGHT);
 
         gameManager.render(g2d);
 
