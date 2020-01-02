@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public abstract class GameObject
 {
     private Point center;
@@ -9,6 +11,10 @@ public abstract class GameObject
         center = inputCenter;
     }
 
+    public abstract void tick();
+
+    public abstract void render(Graphics2D g2d);
+
     // ==========================================
     //
     //                 Getters
@@ -19,7 +25,7 @@ public abstract class GameObject
         return center;
     }
 
-    
+
 
 
     // ==========================================
