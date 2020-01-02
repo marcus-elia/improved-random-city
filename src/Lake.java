@@ -7,7 +7,7 @@ public class Lake extends GameObject
     private double xRadius;
     private double yRadius;
     private double angle;
-    private Ellipse2D.Double ellipse;
+    private Shape ellipse;
 
     public Lake(GameManager inputManager, Point inputCenter, double inputXRadius, double inputYRadius, double inputAngle)
     {
@@ -44,7 +44,7 @@ public class Lake extends GameObject
         tx.rotate(this.angle);
 
         ellipse = new Ellipse2D.Double(center.x - xRadius, center.y - yRadius, xRadius*2, yRadius*2);
-        ellipse = (Ellipse2D.Double) tx.createTransformedShape(ellipse);
+        ellipse = tx.createTransformedShape(ellipse);
     }
 
     // ==========================================
@@ -64,7 +64,7 @@ public class Lake extends GameObject
     {
         return angle;
     }
-    public Ellipse2D getEllipse()
+    public Shape getEllipse()
     {
         return ellipse;
     }
