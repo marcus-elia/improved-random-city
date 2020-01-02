@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameManager
 {
@@ -9,11 +10,22 @@ public class GameManager
     // Keep track of whether the user is holding down a key
     private boolean isScrolling;
 
+
+
+    // ==========================================
+    //
+    //             Lists of Objects
+    //
+    // ==========================================
+    private ArrayList<GameObject> gameObjects;
+
     public GameManager(int inputWidth, int inputHeight)
     {
         width = inputWidth;
         height = inputHeight;
         isScrolling = false;
+
+        gameObjects = new ArrayList<GameObject>();
     }
 
     public void tick()
@@ -53,4 +65,45 @@ public class GameManager
     {
         isScrolling = input;
     }
+
+
+
+
+    // ==========================================
+    //
+    //            User Input Functions
+    //
+    // ==========================================
+    public void moveUp(double amount)
+    {
+        for(GameObject obj : gameObjects)
+        {
+            obj.moveUp(amount);
+        }
+    }
+    public void moveDown(double amount)
+    {
+        for(GameObject obj : gameObjects)
+        {
+            obj.moveDown(amount);
+        }
+    }
+    public void moveLeft(double amount)
+    {
+        for(GameObject obj : gameObjects)
+        {
+            obj.moveLeft(amount);
+        }
+    }
+    public void moveRight(double amount)
+    {
+        for(GameObject obj : gameObjects)
+        {
+            obj.moveRight(amount);
+        }
+    }
+
+
+
+
 }
