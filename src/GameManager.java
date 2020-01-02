@@ -31,6 +31,8 @@ public class GameManager
         diagonalScrollSpeed = scrollSpeed / Math.sqrt(2);
 
         gameObjects = new ArrayList<GameObject>();
+        gameObjects.add(new Vehicle(this,
+                new Point(width/2, height/2), 5, 5, Color.CYAN));
     }
 
     public void tick()
@@ -39,12 +41,18 @@ public class GameManager
          {
              this.scroll();
          }
+        for(GameObject obj : gameObjects)
+        {
+            obj.tick();
+        }
     }
 
     public void render(Graphics2D g2d)
     {
-        g2d.setColor(Color.CYAN);
-        g2d.fillOval(width/2, height/2, 40, 30);
+        for(GameObject obj : gameObjects)
+        {
+            obj.render(g2d);
+        }
     }
 
     // ==========================================
