@@ -2,8 +2,8 @@ import java.awt.*;
 
 public abstract class GameObject
 {
-    private Point center;
-    private GameManager manager;
+    protected Point center;
+    protected GameManager manager;
 
     public GameObject(GameManager inputManager, Point inputCenter)
     {
