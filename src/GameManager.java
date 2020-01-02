@@ -42,18 +42,12 @@ public class GameManager
          {
              this.scroll();
          }
-        for(GameObject obj : gameObjects)
-        {
-            obj.tick();
-        }
+         rm.tick();
     }
 
     public void render(Graphics2D g2d)
     {
-        for(GameObject obj : gameObjects)
-        {
-            obj.render(g2d);
-        }
+        rm.render(g2d);
     }
 
     // ==========================================
