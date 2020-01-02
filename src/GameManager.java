@@ -103,6 +103,10 @@ public class GameManager
     {
         scrollDirection = input;
     }
+    public void addGameObject(GameObject obj)
+    {
+        gameObjects.add(obj);
+    }
 
 
 
