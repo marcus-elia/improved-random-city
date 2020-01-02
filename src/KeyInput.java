@@ -30,17 +30,17 @@ public class KeyInput extends KeyAdapter
             leftArrowKey = true;
             setManagerScrollDirection();
         }
-        else if(key == KeyEvent.VK_RIGHT)
+        if(key == KeyEvent.VK_RIGHT)
         {
             rightArrowKey = true;
             setManagerScrollDirection();
         }
-        else if(key == KeyEvent.VK_UP)
+        if(key == KeyEvent.VK_UP)
         {
             upArrowKey = true;
             setManagerScrollDirection();
         }
-        else if(key == KeyEvent.VK_DOWN)
+        if(key == KeyEvent.VK_DOWN)
         {
             downArrowKey = true;
             setManagerScrollDirection();
@@ -56,17 +56,17 @@ public class KeyInput extends KeyAdapter
             leftArrowKey = false;
             setManagerScrollDirection();
         }
-        else if(key == KeyEvent.VK_RIGHT)
+        if(key == KeyEvent.VK_RIGHT)
         {
             rightArrowKey = false;
             setManagerScrollDirection();
         }
-        else if(key == KeyEvent.VK_UP)
+        if(key == KeyEvent.VK_UP)
         {
             upArrowKey = false;
             setManagerScrollDirection();
         }
-        else if(key == KeyEvent.VK_DOWN)
+        if(key == KeyEvent.VK_DOWN)
         {
             downArrowKey = false;
             setManagerScrollDirection();
@@ -75,6 +75,67 @@ public class KeyInput extends KeyAdapter
 
 
     public void setManagerScrollDirection()
+    {
+        if(upArrowKey || downArrowKey || leftArrowKey || rightArrowKey)
+        {
+            manager.setIsScrolling(true);
+
+            // Up
+            if((upArrowKey && !leftArrowKey && !downArrowKey && !rightArrowKey) ||
+                    (upArrowKey && leftArrowKey && !downArrowKey && rightArrowKey))
+            {
+                manager.setScrollDirection(ScrollDirection.Up);
+            }
+            // Down
+            else if((!upArrowKey && !leftArrowKey && downArrowKey && !rightArrowKey) ||
+                    (!upArrowKey && leftArrowKey && downArrowKey && rightArrowKey))
+            {
+                manager.setScrollDirection(ScrollDirection.Down);
+            }
+            // Left
+            else if((!upArrowKey && leftArrowKey && !downArrowKey && !rightArrowKey) ||
+                    (upArrowKey && leftArrowKey && downArrowKey && !rightArrowKey))
+            {
+                manager.setScrollDirection(ScrollDirection.Left);
+            }
+            // Right
+            else if((!upArrowKey && !leftArrowKey && !downArrowKey && rightArrowKey) ||
+                    (upArrowKey && !leftArrowKey && downArrowKey && rightArrowKey))
+            {
+                manager.setScrollDirection(ScrollDirection.Right);
+            }
+            // UpLeft
+            else if(upArrowKey && leftArrowKey && !downArrowKey) // don't need to check right
+            {
+                manager.setScrollDirection(ScrollDirection.UpLeft);
+            }
+            // DownLeft
+            else if(!upArrowKey && leftArrowKey && downArrowKey) // don't need to check right
+            {
+                manager.setScrollDirection(ScrollDirection.DownLeft);
+            }
+            // DownRight
+            else if(!upArrowKey && !leftArrowKey && downArrowKey) // don't need to check right
+            {
+                manager.setScrollDirection(ScrollDirection.DownRight);
+            }
+            // UpRight
+            else if(upArrowKey && !leftArrowKey && !downArrowKey) // don't need to check right
+            {
+                manager.setScrollDirection(ScrollDirection.UpRight);
+            }
+            else
+            {
+                manager.setScrollDirection(ScrollDirection.None);
+            }
+        }
+        else
+        {
+            manager.setIsScrolling(false);
+            manager.setScrollDirection(ScrollDirection.None);
+        }
+    }
+    /*public void setManagerScrollDirection()
     {
         if(upArrowKey || downArrowKey || leftArrowKey || rightArrowKey)
         {
@@ -166,5 +227,5 @@ public class KeyInput extends KeyAdapter
             manager.setIsScrolling(false);
             manager.setScrollDirection(ScrollDirection.None);
         }
-    }
+    }*/
 }
