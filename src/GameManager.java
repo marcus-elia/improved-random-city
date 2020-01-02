@@ -10,6 +10,8 @@ public class GameManager
     // Keep track of whether the user is holding down a key
     private boolean isScrolling;
     private double scrollSpeed;
+    private double diagonalScrollSpeed;
+    private ScrollDirection scrollDirection;
 
 
 
@@ -26,13 +28,17 @@ public class GameManager
         height = inputHeight;
         isScrolling = false;
         scrollSpeed = 5;
+        diagonalScrollSpeed = scrollSpeed / Math.sqrt(2);
 
         gameObjects = new ArrayList<GameObject>();
     }
 
     public void tick()
     {
-
+         if(isScrolling)
+         {
+             this.scroll();
+         }
     }
 
     public void render(Graphics2D g2d)
@@ -62,6 +68,10 @@ public class GameManager
     {
         return scrollSpeed;
     }
+    public ScrollDirection getScrollDirection()
+    {
+        return scrollDirection;
+    }
 
     // ==========================================
     //
@@ -76,6 +86,10 @@ public class GameManager
     {
         scrollSpeed = input;
     }
+    public void setScrollDirection(ScrollDirection input)
+    {
+        scrollDirection = input;
+    }
 
 
 
@@ -84,6 +98,53 @@ public class GameManager
     //            User Input Functions
     //
     // ==========================================
+
+    // This function actually moves all of the GameObjects when scrolling. Note that their
+    // coordinates are shifted in the opposite direction of the scrolling, so it looks like
+    // the camera is moving properly.
+    public void scroll()
+    {
+        // The 4 cardinal directions
+        if(scrollDirection == ScrollDirection.Up)
+        {
+            this.moveDown(scrollSpeed);
+        }
+        else if(scrollDirection == ScrollDirection.Left)
+        {
+            this.moveRight(scrollSpeed);
+        }
+        else if(scrollDirection == ScrollDirection.Down)
+        {
+            this.moveUp(scrollSpeed);
+        }
+        else if(scrollDirection == ScrollDirection.Right)
+        {
+            this.moveLeft(scrollSpeed);
+        }
+        // The diagonals
+        else if(scrollDirection == ScrollDirection.UpLeft)
+        {
+            this.moveRight(diagonalScrollSpeed);
+            this.moveDown(diagonalScrollSpeed);
+        }
+        else if(scrollDirection == ScrollDirection.DownLeft)
+        {
+            this.moveRight(diagonalScrollSpeed);
+            this.moveUp(diagonalScrollSpeed);
+        }
+        else if(scrollDirection == ScrollDirection.DownRight)
+        {
+            this.moveUp(diagonalScrollSpeed);
+            this.moveLeft(diagonalScrollSpeed);
+        }
+        else if(scrollDirection == ScrollDirection.UpRight)
+        {
+            this.moveDown(diagonalScrollSpeed);
+            this.moveLeft(diagonalScrollSpeed);
+        }
+    }
+
+    // Helper functions for movement
     public void moveUp(double amount)
     {
         for(GameObject obj : gameObjects)
