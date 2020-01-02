@@ -6,6 +6,7 @@ public class RoadMap extends GameObject
     private ArrayList<Intersection> intersections;
     private ArrayList<Road> roads;
     private ArrayList<Vehicle> vehicles;
+    private ArrayList<Lake> lakes;
 
     public RoadMap(GameManager inputManager, Point inputCenter)
     {
@@ -13,18 +14,49 @@ public class RoadMap extends GameObject
         intersections = new ArrayList<Intersection>();
         roads = new ArrayList<Road>();
         vehicles = new ArrayList<Vehicle>();
+        lakes = new ArrayList<Lake>();
 
         this.makeFirstIntersection();
     }
 
     public void tick()
     {
-
+        for(Lake l : lakes)
+        {
+            l.tick();
+        }
+        for(Road r : roads)
+        {
+            r.tick();
+        }
+        for(Intersection intsec : intersections)
+        {
+            intsec.tick();
+        }
+        for(Vehicle v : vehicles)
+        {
+            v.tick();
+        }
     }
 
     public void render(Graphics2D g2d)
     {
-
+        for(Lake l : lakes)
+        {
+            l.render(g2d);
+        }
+        for(Road r : roads)
+        {
+            r.render(g2d);
+        }
+        for(Intersection intsec : intersections)
+        {
+            intsec.render(g2d);
+        }
+        for(Vehicle v : vehicles)
+        {
+            v.render(g2d);
+        }
     }
 
     // ==========================================
