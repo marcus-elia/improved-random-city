@@ -7,5 +7,6 @@ public enum ScrollDirection
     Down(),
     DownRight(),
     Right(),
-    UpRight();
+    UpRight(),
+    None()
 }
