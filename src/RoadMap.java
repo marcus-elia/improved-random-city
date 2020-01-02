@@ -13,6 +13,8 @@ public class RoadMap extends GameObject
         intersections = new ArrayList<Intersection>();
         roads = new ArrayList<Road>();
         vehicles = new ArrayList<Vehicle>();
+
+        this.makeFirstIntersection();
     }
 
     public void tick()
@@ -23,6 +25,17 @@ public class RoadMap extends GameObject
     public void render(Graphics2D g2d)
     {
 
+    }
+
+    // ==========================================
+    //
+    //          Initialization Functions
+    //
+    // ==========================================
+    public void makeFirstIntersection()
+    {
+        Point centerOfMap = new Point(manager.getWidth()/2, manager.getHeight()/2);
+        this.addIntersection(new Intersection(manager, centerOfMap, this));
     }
 
 
@@ -42,5 +55,16 @@ public class RoadMap extends GameObject
     public ArrayList<Vehicle> getVehicles()
     {
         return vehicles;
+    }
+
+    // ==========================================
+    //
+    //               Setters
+    //
+    // ==========================================
+    public void addIntersection(Intersection intsec)
+    {
+        intersections.add(intsec);
+        manager.addGameObject(intsec);
     }
 }
