@@ -9,6 +9,7 @@ public class GameManager
 
     // Keep track of whether the user is holding down a key
     private boolean isScrolling;
+    private double scrollSpeed;
 
 
 
@@ -24,6 +25,7 @@ public class GameManager
         width = inputWidth;
         height = inputHeight;
         isScrolling = false;
+        scrollSpeed = 5;
 
         gameObjects = new ArrayList<GameObject>();
     }
@@ -35,7 +37,8 @@ public class GameManager
 
     public void render(Graphics2D g2d)
     {
-
+        g2d.setColor(Color.CYAN);
+        g2d.fillOval(width/2, height/2, 40, 30);
     }
 
     // ==========================================
@@ -55,6 +58,10 @@ public class GameManager
     {
         return isScrolling;
     }
+    public double getScrollSpeed()
+    {
+        return scrollSpeed;
+    }
 
     // ==========================================
     //
@@ -65,7 +72,10 @@ public class GameManager
     {
         isScrolling = input;
     }
-
+    public void setScrollSpeed(double input)
+    {
+        scrollSpeed = input;
+    }
 
 
 
