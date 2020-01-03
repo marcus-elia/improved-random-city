@@ -233,6 +233,54 @@ public class RoadMap extends GameObject
         return new Intersection[]{startInt, endInt};
     }
 
+    // Returns true if the proposed road hits or gets too close to an existing road
+    // (Helper function for building roads)
+    public boolean conflictsWithExistingRoad(Point p1, Point p2, Intersection connectTo)
+    {
+        for(Road curRoad : roads)
+        {
+            if(curRoad.hitsRoad(p1, p2) ||
+                    curRoad.directedDistance(p2) < minIntersectionDistance)
+            {
+                // also make sure the road we are too close to isn't just coming out
+                // from our target intersection we are connecting to.
+                if(connectTo == null)
+                {
+                    return true;
+                }
+                if(!connectTo.getRoads().contains(curRoad))
+                {
+                    return true;
+                }
+            }
+        }
+        return false; // nothing bad happened
+    }
+
+    // Returns true if the proposed road gets too close to an existing intersection
+    // (Helper function for building roads)
+    public boolean conflictsWithExistingIntersection(Point p1, Point p2, Intersection connectTo)
+    {
+        for(Intersection intsec2 : intersections)
+        {
+            // if we are close to an intersection that isn't this one
+            if(intsec2.directedDistance(p1, p2) < this.minIntersectionDistance
+                    && !intsec2.sameCoordinates(p1))
+            {
+                if(connectTo == null)
+                {
+                    return true;
+                }
+                // and the intersection isn't the one we are locking to
+                if(!connectTo.equals(intsec2))
+                {
+                    return true;
+                }
+            }
+        }
+        return false; // nothing bad happened
+    }
+
     // This function tries several times to build a road from each intersections.
     // It stops once one new road is built
     public void buildNewRoad()
@@ -283,48 +331,17 @@ public class RoadMap extends GameObject
                         }
                     }
 
-                    // if the proposed road would cross an existing road or end too close to one,
-                    // cancel
-                    for(Road curRoad : roads)
+                    // Make sure we don't intersect or come to close to an existing road
+                    if(conflictsWithExistingRoad(intsec.getCenter(), targetPoint, connectTo))
                     {
-                        if(curRoad.hitsRoad(intsec.getCenter(), targetPoint) ||
-                                curRoad.directedDistance(targetPoint) < minIntersectionDistance)
-                        {
-                            // also make sure the road we are too close to isn't just coming out
-                            // from our target intersection we are connecting to.
-                            if(connectTo == null)
-                            {
-                                roadApproved = false;
-                                break;
-                            }
-                            if(!connectTo.getRoads().contains(curRoad))
-                            {
-                                roadApproved = false;
-                                break;
-                            }
-                        }
+                        roadApproved = false;
+                    }
+                    // Make sure we don't come to close to an existing intersection
+                    if(conflictsWithExistingIntersection(intsec.getCenter(), targetPoint, connectTo))
+                    {
+                        roadApproved = false;
                     }
 
-                    // if the road passes too close to an existing intersection, cancel
-                    for(Intersection intsec2 : intersections)
-                    {
-                        // if we are close to an intersection that isn't this one
-                        if(intsec2.directedDistance(intsec.getCenter(), targetPoint) < this.minIntersectionDistance
-                                && !intsec.equals(intsec2))
-                        {
-                            if(connectTo == null)
-                            {
-                                roadApproved = false;
-                                break;
-                            }
-                            // and the intersection isn't the one we are locking to
-                            if(!connectTo.equals(intsec2))
-                            {
-                                roadApproved = false;
-                                break;
-                            }
-                        }
-                    }
                     // if nothing went wrong, build the road
                     if(roadApproved)
                     {
