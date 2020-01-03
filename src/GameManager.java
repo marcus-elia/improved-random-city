@@ -42,7 +42,10 @@ public class GameManager
          {
              this.scroll();
          }
-         rm.tick();
+         else
+         {
+             rm.tick();
+         }
     }
 
     public void render(Graphics2D g2d)
