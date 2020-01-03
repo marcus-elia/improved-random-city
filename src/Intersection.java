@@ -59,4 +59,35 @@ public class Intersection extends GameObject
     {
         return roads.size() < maxNumRoads;
     }
+
+
+
+    // ==========================================
+    //
+    //               Road Building
+    //
+    // ==========================================
+
+    // Returns the shortest distance from this Intersection to a segment
+    public double directedDistance(Point p1, Point p2)
+    {
+        double distPA = center.distanceToPoint(p1);
+        double distPB = center.distanceToPoint(p2);
+        double distAB = p1.distanceToPoint(p2);
+
+        double sqdistPA = distPA * distPA;
+        double sqdistPB = distPB * distPB;
+        double sqdistAB = distAB * distAB;
+
+        if(sqdistPA > sqdistPB + sqdistAB || sqdistPB > sqdistPA + sqdistAB)
+        {
+            return Math.min(distPA, distPB);
+        }
+
+        double A = p2.y - p1.y;
+        double B = p1.x - p2.x;
+        double C = p1.y*p2.x - p2.y*p1.x;
+
+        return Math.abs(A*center.x + B*center.y + C) / Math.sqrt(A*A + B*B);
+    }
 }
