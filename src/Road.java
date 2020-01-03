@@ -165,4 +165,57 @@ public class Road extends GameObject
         return xOfIntersection > startInt.getCenter().x && xOfIntersection < endInt.getCenter().x
                 && xOfIntersection >= p1.x  && xOfIntersection <= p2.x;
     }
+
+    // This returns the shortest distance between this segment and p. It is either the distance between
+    // p and one of the endpoints, or the true perpendicular directed distance
+    public double directedDistance(Point p)
+    {
+        double A, B, C;
+
+        // if this road is vertical
+        if(slope.isEmpty())
+        {
+            if(p.y > endInt.getCenter().y && p.y < startInt.getCenter().y)
+            {
+                return Math.abs(p.x - startInt.getCenter().x);
+            }
+            else
+            {
+                return Math.min(startInt.getCenter().distanceToPoint(p),
+                        endInt.getCenter().distanceToPoint(p));
+            }
+        }
+        // if the road is horizontal
+        if(slope.get() == 0)
+        {
+            if(p.x > startInt.getCenter().x && p.x < endInt.getCenter().x)
+            {
+                return Math.abs(p.y - startInt.getCenter().y);
+            }
+            else
+            {
+                return Math.min(startInt.getCenter().distanceToPoint(p),
+                        endInt.getCenter().distanceToPoint(p));
+            }
+        }
+
+        else
+        {
+            A = slope.get();
+            B = -1;
+            C = yInt.get();
+            double otherSlope = -1/A;
+            double otherYint = p.y - otherSlope*p.x;
+            double xOfIntersection = (otherYint - yInt.get()) / (slope.get() - otherSlope);
+            if(xOfIntersection > startInt.getCenter().x && xOfIntersection < endInt.getCenter().x)
+            {
+                return Math.abs(A*p.x + B*p.y + C) / Math.sqrt(A*A + B*B);
+            }
+            else
+            {
+                return Math.min(startInt.getCenter().distanceToPoint(p),
+                        endInt.getCenter().distanceToPoint(p));
+            }
+        }
+    }
 }
