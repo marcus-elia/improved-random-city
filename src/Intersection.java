@@ -55,4 +55,8 @@ public class Intersection extends GameObject
     {
         return maxNumRoads;
     }
+    public boolean canHaveNewRoad()
+    {
+        return roads.size() < maxNumRoads;
+    }
 }
