@@ -212,6 +212,9 @@ public class RoadMap extends GameObject
     {
         roads.add(r);
         manager.addGameObject(r);
+        // The relevant intersections need to add the road
+        r.getStartInt().addRoad(r, true);
+        r.getEndInt().addRoad(r, false);
     }
     public void addVehicle(Vehicle v)
     {
