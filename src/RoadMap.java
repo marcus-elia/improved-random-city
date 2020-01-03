@@ -19,6 +19,9 @@ public class RoadMap extends GameObject
     //
     // ==========================================
 
+    // for giving each road an ID
+    private int numRoads;
+
     // this keeps track of when to build a new road or lake
     private int ticksBetweenBuilds;
     private int ticksSinceLastBuild;
@@ -49,6 +52,8 @@ public class RoadMap extends GameObject
         lakes = new ArrayList<Lake>();
 
         // Initialize parameters
+        numRoads = 0;
+
         ticksBetweenBuilds = 500;
         ticksSinceLastBuild = 0;
 
@@ -150,6 +155,10 @@ public class RoadMap extends GameObject
     public ArrayList<Vehicle> getVehicles()
     {
         return vehicles;
+    }
+    public int getNumRoads()
+    {
+        return numRoads;
     }
 
     // ==========================================
@@ -380,7 +389,7 @@ public class RoadMap extends GameObject
                             p2 = intsec.getCenter();
                         }
                         Intersection[] roadInts = this.addIntersectionsIfNeeded(p1, p2);
-                        this.addRoad(new Road(manager, null,this,0,
+                        this.addRoad(new Road(manager, null,this, ++numRoads,
                                 roadInts[0], roadInts[1]));
                         return;
                     }
