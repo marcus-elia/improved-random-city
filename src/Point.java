@@ -58,4 +58,10 @@ public class Point
     {
         return this.rotateAroundThis(p.x, p.y, theta);
     }
+
+
+    public Point getPointFromHere(double distance, double angle)
+    {
+        return new Point(x + distance*Math.cos(angle), y + distance*Math.sin(angle));
+    }
 }
