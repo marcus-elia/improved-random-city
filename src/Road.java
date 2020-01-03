@@ -122,6 +122,14 @@ public class Road extends GameObject
     {
         return endInt;
     }
+    public Point getStartPoint()
+    {
+        return startInt.getCenter();
+    }
+    public Point getEndPoint()
+    {
+        return endInt.getCenter();
+    }
     public double x1()
     {
         return startInt.getCenter().x;
