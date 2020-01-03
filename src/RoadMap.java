@@ -151,10 +151,9 @@ public class RoadMap extends GameObject
     // ==========================================
     public void makeFirstIntersection()
     {
-        Point centerOfMap = new Point(manager.getWidth()/2, manager.getHeight()/2);
+        cityCenter = new Point(manager.getWidth()/2, manager.getHeight()/2);
         currentRadius = 0;
-        this.addIntersection(new Intersection(manager, centerOfMap, this, 4));
-        cityCenter = intersections.get(0).getCenter(); // keep track of this intersection's center as it moves
+        this.addIntersection(new Intersection(manager, cityCenter, this, 4));
     }
 
 
