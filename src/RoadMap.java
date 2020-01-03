@@ -42,6 +42,9 @@ public class RoadMap extends GameObject
     // The minimum distance we force any two intersections to be away from each other
     private double minIntersectionDistance;
 
+    // The average size of the lakes' longer radius (lake is ellipse)
+    private int averageLakeSize;
+
     // ==========================================
     //
     //             City Properties
@@ -78,6 +81,8 @@ public class RoadMap extends GameObject
         intersectionLockOnDistance = 10;
 
         minIntersectionDistance = 30;
+
+        averageLakeSize = 70;
 
         this.makeFirstIntersection();
         this.addLake(new Lake(manager, new Point(50, 50), 40, 30, Math.PI/4));
@@ -332,6 +337,20 @@ public class RoadMap extends GameObject
         return false; // nothing bad happened
     }
 
+    // Return true if the shape representing a proposed lake intersects
+    // an existing lake.
+    public boolean conflictsWithExistingLake(Point proposedCenter, double proposedXRadius)
+    {
+        for(Lake l : lakes)
+        {
+            if(l.getCenter().distanceToPoint(proposedCenter) < Math.max(proposedXRadius, l.getXRadius()))
+            {
+                return true;
+            }
+        }
+        return false;  // nothing bad happened
+    }
+
     // This function tries several times to build a road from each intersections.
     // It stops once one new road is built
     public void buildNewRoad()
@@ -422,6 +441,33 @@ public class RoadMap extends GameObject
                         return;
                     }
                 }
+            }
+        }
+    }
+
+    // Tries several times to build a lake on the edge of town.
+    public void buildNewLake()
+    {
+        Point targetPoint;
+        double distanceFromCenter, angleFromCenter;
+        double xRadius, yRadius, angle;
+
+        xRadius = (.6*Math.random() + .6) * averageLakeSize;
+        yRadius = (.3*Math.random() + .4) * xRadius;
+        angle = Math.random() * 2 * Math.PI;
+
+        for(int i = 0; i < numAttempts; i++)
+        {
+            distanceFromCenter = currentRadius + averageLakeSize;
+            angleFromCenter = Math.random()*2*Math.PI;
+
+            targetPoint = new Point(distanceFromCenter*Math.cos(angleFromCenter),
+                    distanceFromCenter*Math.sin(angleFromCenter));
+
+            if(!conflictsWithExistingLake(targetPoint, xRadius))
+            {
+                this.addLake(new Lake(manager, targetPoint, xRadius, yRadius, angle));
+                return;
             }
         }
     }
