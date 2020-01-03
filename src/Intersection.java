@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,8 +40,10 @@ public class Intersection extends GameObject
     }
 
     @Override
-    public void render(Graphics2D g2d) {
-
+    public void render(Graphics2D g2d)
+    {
+        g2d.setColor(Color.MAGENTA);
+        g2d.fill(new Ellipse2D.Double(center.x - 4, center.y - 4, 8, 8));
     }
 
     // ==========================================
@@ -118,7 +121,7 @@ public class Intersection extends GameObject
         //this.updateIntersectionFill();
     }
 
-    
+
 
 
 
