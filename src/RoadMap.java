@@ -69,7 +69,7 @@ public class RoadMap extends GameObject
         // Initialize parameters
         numRoads = 0;
 
-        ticksBetweenBuilds = 500;
+        ticksBetweenBuilds = 50;
         ticksSinceLastBuild = 0;
 
         numAttempts = 5;
@@ -95,7 +95,7 @@ public class RoadMap extends GameObject
         // If it's time to try to build a new road
         if(ticksSinceLastBuild == ticksBetweenBuilds)
         {
-            if(Math.random() > 0.01)
+            if(Math.random() > 0.05)
             {
                 this.buildNewRoad();
             }
@@ -463,8 +463,8 @@ public class RoadMap extends GameObject
             distanceFromCenter = currentRadius + averageLakeSize;
             angleFromCenter = Math.random()*2*Math.PI;
 
-            targetPoint = new Point(distanceFromCenter*Math.cos(angleFromCenter),
-                    distanceFromCenter*Math.sin(angleFromCenter));
+            targetPoint = new Point(cityCenter.x + distanceFromCenter*Math.cos(angleFromCenter),
+                    cityCenter.y + distanceFromCenter*Math.sin(angleFromCenter));
 
             if(!conflictsWithExistingLake(targetPoint, xRadius))
             {
