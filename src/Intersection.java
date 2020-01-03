@@ -90,4 +90,11 @@ public class Intersection extends GameObject
 
         return Math.abs(A*center.x + B*center.y + C) / Math.sqrt(A*A + B*B);
     }
+
+    // Returns true if this intersection is the same as the given coordinates
+    public boolean sameCoordinates(Point p)
+    {
+        double tolerance = .4;
+        return center.distanceToPoint(p) < tolerance;
+    }
 }
