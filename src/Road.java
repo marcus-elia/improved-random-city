@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.util.Optional;
 
 // A road is fundamentally two points with a segment connecting them.
@@ -52,8 +53,11 @@ public class Road extends GameObject
     }
 
     @Override
-    public void render(Graphics2D g2d) {
-
+    public void render(Graphics2D g2d)
+    {
+        g2d.setColor(Color.RED);
+        Line2D line = new Line2D.Double(x1(), y1(), x2(), y2());
+        g2d.draw(line);
     }
 
     // ==========================================
@@ -103,6 +107,31 @@ public class Road extends GameObject
     {
         angle = startInt.getCenter().angleToOtherPoint(endInt.getCenter());
     }
+
+
+    // ==========================================
+    //
+    //                 Getters
+    //
+    // ==========================================
+    public double x1()
+    {
+        return startInt.getCenter().x;
+    }
+    public double y1()
+    {
+        return startInt.getCenter().y;
+    }
+    public double x2()
+    {
+        return endInt.getCenter().x;
+    }
+    public double y2()
+    {
+        return endInt.getCenter().y;
+    }
+
+
 
 
     // ==========================================
