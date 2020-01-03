@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Intersection extends GameObject
 {
@@ -63,6 +64,61 @@ public class Intersection extends GameObject
     {
         return roads.size() < maxNumRoads;
     }
+
+    // ==========================================
+    //
+    //                Setters
+    //
+    // ==========================================
+
+    // Add a Road which starts or ends at this Intersection
+    // If boolean startsHere == true, then the road starts at this intersection
+    // Otherwise, it ends here.
+    public void addRoad(Road r, boolean startsHere)
+    {
+        // Add the other side of the road to the neighbors here
+        if(startsHere)
+        {
+            this.neighbors.add(this.rm.hasIntersection(r.getEndPoint()));
+        }
+        else
+        {
+            this.neighbors.add(this.rm.hasIntersection(r.getStartPoint()));
+        }
+
+
+        // put the road in proper spot in the linked list
+        double angleToAdd = r.getAngleFromIntersection(this);
+        if(this.roads.isEmpty() || angleToAdd < roads.getFirst().getAngleFromIntersection(this))
+        {
+            roads.addFirst(r);
+        }
+        else
+        {
+            double curAngle;
+            Road curRoad;
+            ListIterator<Road> iter = (ListIterator)roads.iterator();
+
+            while(iter.hasNext())
+            {
+                curRoad = iter.next();
+                curAngle = curRoad.getAngleFromIntersection(this);
+                if(angleToAdd < curAngle)
+                {
+                    iter.previous();
+                    iter.add(r);
+                    //this.updateIntersectionFillPoints();
+                    //this.updateIntersectionFill();
+                    return;
+                }
+            }
+            roads.addLast(r);
+        }
+        //this.updateIntersectionFillPoints();
+        //this.updateIntersectionFill();
+    }
+
+    
 
 
 
