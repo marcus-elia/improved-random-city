@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 
 public class Lake extends GameObject
 {
@@ -101,5 +102,18 @@ public class Lake extends GameObject
         AffineTransform tx = new AffineTransform();
         tx.translate(amount, 0);
         ellipse = tx.createTransformedShape(ellipse);
+    }
+
+
+
+    // ==========================================
+    //
+    //         City Building Functions
+    //
+    // ==========================================
+    public boolean containsPoint(Point p)
+    {
+        Point2D p2d = new Point2D.Double(p.x, p.y);
+        return ellipse.contains(p2d);
     }
 }
