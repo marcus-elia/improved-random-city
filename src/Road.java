@@ -114,6 +114,14 @@ public class Road extends GameObject
     //                 Getters
     //
     // ==========================================
+    public Intersection getStartInt()
+    {
+        return startInt;
+    }
+    public Intersection getEndInt()
+    {
+        return endInt;
+    }
     public double x1()
     {
         return startInt.getCenter().x;
