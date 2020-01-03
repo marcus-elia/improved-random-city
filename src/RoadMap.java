@@ -42,6 +42,18 @@ public class RoadMap extends GameObject
     // The minimum distance we force any two intersections to be away from each other
     private double minIntersectionDistance;
 
+    // ==========================================
+    //
+    //             City Properties
+    //
+    // ==========================================
+
+    // The center of the city (which can move with scrolling)
+    private Point cityCenter;
+
+    // The farthest distance from the center that has been built
+    private int currentRadius;
+
     public RoadMap(GameManager inputManager, Point inputCenter)
     {
         // Initialize Lists
@@ -135,7 +147,9 @@ public class RoadMap extends GameObject
     public void makeFirstIntersection()
     {
         Point centerOfMap = new Point(manager.getWidth()/2, manager.getHeight()/2);
+        currentRadius = 0;
         this.addIntersection(new Intersection(manager, centerOfMap, this, 4));
+        cityCenter = intersections.get(0).getCenter(); // keep track of this intersection's center as it moves
     }
 
 
@@ -160,6 +174,14 @@ public class RoadMap extends GameObject
     {
         return numRoads;
     }
+    public Point getCityCenter()
+    {
+        return cityCenter;
+    }
+    public int getCurrentRadius()
+    {
+        return currentRadius;
+    }
 
     // ==========================================
     //
@@ -170,6 +192,12 @@ public class RoadMap extends GameObject
     {
         intersections.add(intsec);
         manager.addGameObject(intsec);
+
+        // Every time we add in an intersection, check if it has extended the radius
+        if(intsec.getCenter().distanceToPoint(cityCenter) > currentRadius)
+        {
+            currentRadius = (int)intsec.getCenter().distanceToPoint(cityCenter);
+        }
     }
     public void addLake(Lake l)
     {
@@ -231,13 +259,13 @@ public class RoadMap extends GameObject
         if(startInt == null)
         {
             startInt = new Intersection(manager, p1, this, 5);
-            this.intersections.add(startInt);
+            this.addIntersection(startInt);
         }
         Intersection endInt = this.hasIntersection(p2);
         if(endInt == null)
         {
             endInt = new Intersection(manager, p2, this, 5);
-            this.intersections.add(endInt);
+            this.addIntersection(endInt);
         }
         return new Intersection[]{startInt, endInt};
     }
