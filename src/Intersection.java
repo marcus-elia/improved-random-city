@@ -26,6 +26,10 @@ public class Intersection extends GameObject
         super(inputManager, inputCenter);
         rm = inputRM;
         maxNumRoads = inputMaxNumRoads;
+
+        // Initializing lists
+        roads = new LinkedList<Road>();
+        neighbors = new ArrayList<Intersection>();
     }
 
     @Override
