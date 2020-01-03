@@ -263,4 +263,28 @@ public class Road extends GameObject
             }
         }
     }
+
+
+    // Get the angle that this road makes when leaving the given intersection
+    // Only works if the intersection is either the start or end of the Road
+    public double getAngleFromIntersection(Intersection intsec)
+    {
+        if(this.startInt.equals(intsec))
+        {
+            return this.angle;
+        }
+        else if(this.endInt.equals(intsec))
+        {
+            if(this.angle >= Math.PI)
+            {
+                return this.angle - Math.PI;
+            }
+            else
+            {
+                return this.angle + Math.PI;
+            }
+        }
+        System.out.println("The intersection is not attached to this road.");
+        return 0;
+    }
 }
