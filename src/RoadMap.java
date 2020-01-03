@@ -17,6 +17,7 @@ public class RoadMap extends GameObject
         lakes = new ArrayList<Lake>();
 
         this.makeFirstIntersection();
+        this.addLake(new Lake(manager, new Point(50, 50), 40, 30, Math.PI/4));
     }
 
     public void tick()
@@ -99,4 +100,20 @@ public class RoadMap extends GameObject
         intersections.add(intsec);
         manager.addGameObject(intsec);
     }
+    public void addLake(Lake l)
+    {
+        lakes.add(l);
+        manager.addGameObject(l);
+    }
+    public void addRoad(Road r)
+    {
+        roads.add(r);
+        manager.addGameObject(r);
+    }
+    public void addVehicle(Vehicle v)
+    {
+        vehicles.add(v);
+        manager.addGameObject(v);
+    }
+
 }
