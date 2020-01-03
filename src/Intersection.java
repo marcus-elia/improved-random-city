@@ -19,10 +19,13 @@ public class Intersection extends GameObject
     // a list of the intersections directly connected to this by a road
     private ArrayList<Intersection> neighbors;
 
-    public Intersection(GameManager inputManager, Point inputCenter, RoadMap inputRM)
+    private int maxNumRoads;
+
+    public Intersection(GameManager inputManager, Point inputCenter, RoadMap inputRM, int inputMaxNumRoads)
     {
         super(inputManager, inputCenter);
         rm = inputRM;
+        maxNumRoads = inputMaxNumRoads;
     }
 
     @Override
@@ -47,5 +50,9 @@ public class Intersection extends GameObject
     public ArrayList<Intersection> getNeighbors()
     {
         return neighbors;
+    }
+    public int getMaxNumRoads()
+    {
+        return maxNumRoads;
     }
 }
