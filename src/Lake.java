@@ -44,7 +44,7 @@ public class Lake extends GameObject
         AffineTransform tx = new AffineTransform();
         tx.rotate(this.angle);
 
-        ellipse = new Ellipse2D.Double(center.x - xRadius, center.y - yRadius, xRadius*2, yRadius*2);
+        ellipse = new Ellipse2D.Double(center.x - xRadius/2, center.y - yRadius/2, xRadius, yRadius);
         ellipse = tx.createTransformedShape(ellipse);
     }
 
