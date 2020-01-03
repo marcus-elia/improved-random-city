@@ -103,4 +103,66 @@ public class Road extends GameObject
     {
         angle = startInt.getCenter().angleToOtherPoint(endInt.getCenter());
     }
+
+
+    // ==========================================
+    //
+    //          Road Building Functions
+    //
+    // ==========================================
+    // Return true if this road intersects the road determined by p1 and p2
+    public boolean hitsRoad(Point p1, Point p2)
+    {
+        double xOfIntersection;
+        Point temp;
+
+        // Reorder p1 and p2 if needed
+        if(p1.x > p2.x || (p1.x == p2.x && p1.y < p2.y))
+        {
+            temp = p1;
+            p1 = p2;
+            p2 = temp;
+        }
+
+        // If both are vertical
+        if(p1.x == p2.x && slope.isEmpty())
+        {
+            return false;
+        }
+        // If just the new segment is vertical
+        else if(p1.x == p2.x)
+        {
+            // Check that this line a) starts left of the vertical line
+            //                      b) ends right of the vertical line
+            //                      c) crosses the vertical line higher than its bottom
+            //                      d) crosses the vertical line lower than its top
+            return startInt.getCenter().x < p1.x && endInt.getCenter().x > p1.x &&
+                    slope.get()*p1.x + yInt.get() < p1.y && slope.get()*p1.x + yInt.get() > p2.y;
+        }
+
+        // If we haven't returned yet, then we know the new segment is not vertical. We can find its
+        // slope and y-intercept
+        double otherSlope = (p2.y - p1.y) / (double)(p2.x - p1.x);
+        double otherYint = p1.y - otherSlope*p1.x;
+
+        // if just this road is vertical
+        if(slope.isEmpty())
+        {
+            // Same thing as we just did, just the opposite
+            return p1.x < startInt.getCenter().x && p2.x > startInt.getCenter().x &&
+                otherSlope*startInt.getCenter().x + otherYint < startInt.getCenter().y &&
+                otherSlope*startInt.getCenter().x + otherYint > endInt.getCenter().y;
+        }
+
+        // If the two segments have the same slope, they do not intersect
+        if(Math.abs(otherSlope - slope.get()) < 0.001)
+        {
+            return false;
+        }
+
+        // Otherwise, calculate the intersection point normally
+        xOfIntersection = (otherYint - yInt.get()) / (slope.get() - otherSlope);
+        return xOfIntersection > startInt.getCenter().x && xOfIntersection < endInt.getCenter().x
+                && xOfIntersection >= p1.x  && xOfIntersection <= p2.x;
+    }
 }
