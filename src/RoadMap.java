@@ -85,7 +85,6 @@ public class RoadMap extends GameObject
         averageLakeSize = 70;
 
         this.makeFirstIntersection();
-        this.addLake(new Lake(manager, new Point(50, 50), 40, 30, Math.PI/4));
     }
 
     public void tick()
@@ -345,7 +344,7 @@ public class RoadMap extends GameObject
     {
         for(Lake l : lakes)
         {
-            if(l.getCenter().distanceToPoint(proposedCenter) < Math.max(proposedXRadius, l.getXRadius()))
+            if(l.getCenter().distanceToPoint(proposedCenter) < 2*Math.max(proposedXRadius, l.getXRadius()))
             {
                 return true;
             }
