@@ -459,7 +459,7 @@ public class RoadMap extends GameObject
 
         for(int i = 0; i < numAttempts; i++)
         {
-            distanceFromCenter = currentRadius + averageLakeSize;
+            distanceFromCenter = currentRadius + xRadius + 10;
             angleFromCenter = Math.random()*2*Math.PI;
 
             targetPoint = new Point(cityCenter.x + distanceFromCenter*Math.cos(angleFromCenter),
