@@ -281,6 +281,20 @@ public class RoadMap extends GameObject
         return false; // nothing bad happened
     }
 
+    // Returns true if the proposed road intersects an existing lake
+    // (Helper function for building roads)
+    public boolean conflictsWithExistingLake(Point p1, Point p2)
+    {
+        for(Lake l : lakes)
+        {
+            if(l.containsPoint(p1) || l.containsPoint(p2))
+            {
+                return true;
+            }
+        }
+        return false; // nothing bad happened
+    }
+
     // This function tries several times to build a road from each intersections.
     // It stops once one new road is built
     public void buildNewRoad()
@@ -308,6 +322,8 @@ public class RoadMap extends GameObject
 
                     // Iterate through every intersection.
                     // If the new point is very close to an existing intersection, lock onto it.
+                    // Unless we already have a road to that intersection from the original one, or
+                    // the new intersection has too many roads. In that case, reject this road.
                     for(Intersection intsec2 : intersections)
                     {
                         if(intsec2.getCenter().distanceToPoint(targetPoint) < intersectionLockOnDistance)
@@ -338,6 +354,11 @@ public class RoadMap extends GameObject
                     }
                     // Make sure we don't come to close to an existing intersection
                     if(conflictsWithExistingIntersection(intsec.getCenter(), targetPoint, connectTo))
+                    {
+                        roadApproved = false;
+                    }
+                    // Make sure we don't hit an existing lake
+                    if(conflictsWithExistingLake(intsec.getCenter(), targetPoint))
                     {
                         roadApproved = false;
                     }
