@@ -119,8 +119,8 @@ public class Lake extends GameObject
 
     // Returns true if the two lakes would be intersecting if at the right angle
     // (if their x-axes happened to align)
-    public boolean potentiallyOverlapsLake(Point otherCenter, double otherXRadius)
+    public static boolean potentiallyOverlapping(Point c1, double xRad1, Point c2, double xRad2)
     {
-        return center.distanceToPoint(otherCenter) < xRadius + otherXRadius;
+        return c1.distanceToPoint(c2) < xRad1 + xRad2;
     }
 }
