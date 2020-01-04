@@ -116,4 +116,11 @@ public class Lake extends GameObject
         Point2D p2d = new Point2D.Double(p.x, p.y);
         return ellipse.contains(p2d);
     }
+
+    // Returns true if the two lakes would be intersecting if at the right angle
+    // (if their x-axes happened to align)
+    public boolean potentiallyOverlapsLake(Point otherCenter, double otherXRadius)
+    {
+        return center.distanceToPoint(otherCenter) < xRadius + otherXRadius;
+    }
 }
