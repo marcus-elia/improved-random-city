@@ -10,6 +10,10 @@ public class Lake extends GameObject
     private double angle;
     private Shape ellipse;
 
+    // The focii of the ellipse
+    private Point focus1;
+    private Point focus2;
+
     public Lake(GameManager inputManager, Point inputCenter, double inputXRadius, double inputYRadius, double inputAngle)
     {
         super(inputManager, inputCenter);
@@ -17,7 +21,7 @@ public class Lake extends GameObject
         yRadius = inputYRadius;
         angle = inputAngle;
         this.createEllipse();
-
+        this.setFocii();
     }
 
 
@@ -48,6 +52,14 @@ public class Lake extends GameObject
         ellipse = tx.createTransformedShape(ellipse);
     }
 
+    // Set the focus points using ellipse properties
+    public void setFocii()
+    {
+        double c = Math.sqrt(xRadius*xRadius - yRadius*yRadius);
+        focus1 = new Point(center.x + c*Math.cos(angle), center.y + c*Math.sin(angle));
+        focus2 = new Point(center.x - c*Math.cos(angle), center.y - c*Math.sin(angle));
+    }
+
     // ==========================================
     //
     //               Getters
@@ -68,6 +80,14 @@ public class Lake extends GameObject
     public Shape getEllipse()
     {
         return ellipse;
+    }
+    public Point getFocus1()
+    {
+        return focus1;
+    }
+    public Point getFocus2()
+    {
+        return focus2;
     }
 
     // ==========================================
