@@ -82,7 +82,7 @@ public class RoadMap extends GameObject
 
         minIntersectionDistance = 30;
 
-        averageLakeSize = 70;
+        averageLakeSize = 100;
 
         this.makeFirstIntersection();
     }
@@ -437,7 +437,9 @@ public class RoadMap extends GameObject
                             p2 = intsec.getCenter();
                         }
                         Intersection[] roadInts = this.addIntersectionsIfNeeded(p1, p2);
-                        this.addRoad(new Road(manager, null,this, ++numRoads,
+                        Point center = new Point((intsec.getCenter().x + targetPoint.x)/2,
+                                (intsec.getCenter().y + targetPoint.y)/2);
+                        this.addRoad(new Road(manager, center,this, ++numRoads,
                                 roadInts[0], roadInts[1]));
                         return;
                     }
