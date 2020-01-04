@@ -62,7 +62,7 @@ public class Lake extends GameObject
 
     // ==========================================
     //
-    //               Getters
+    //                Getters
     //
     // ==========================================
     public double getXRadius()
@@ -142,5 +142,17 @@ public class Lake extends GameObject
     public static boolean potentiallyOverlapping(Point c1, double xRad1, Point c2, double xRad2)
     {
         return c1.distanceToPoint(c2) < xRad1 + xRad2;
+    }
+
+    public static double focusDistanceSum(Point f1, Point f2, Point p)
+    {
+        return f1.distanceToPoint(p) + f2.distanceToPoint(p);
+    }
+
+    // Returns true if the given point p is too close to the ellipse to put an
+    // intersection there.
+    public static boolean isTooCloseToLake(Point f1, Point f2, double xRadius, Point p, double roadWidth)
+    {
+        return Lake.focusDistanceSum(f1, f2, p) < 2*xRadius + roadWidth;
     }
 }
