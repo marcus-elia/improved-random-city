@@ -94,7 +94,7 @@ public class RoadMap extends GameObject
         // If it's time to try to build a new road
         if(ticksSinceLastBuild == ticksBetweenBuilds)
         {
-            if(Math.random() > 0.05)
+            if(Math.random() > 0.09)
             {
                 this.buildNewRoad();
             }
@@ -344,7 +344,7 @@ public class RoadMap extends GameObject
     {
         for(Lake l : lakes)
         {
-            if(l.getCenter().distanceToPoint(proposedCenter) < 2*Math.max(proposedXRadius, l.getXRadius()))
+            if(Lake.potentiallyOverlapping(l.getCenter(), l.getXRadius(), proposedCenter, proposedXRadius))
             {
                 return true;
             }
@@ -456,7 +456,7 @@ public class RoadMap extends GameObject
         double xRadius, yRadius, angle;
 
         xRadius = (.6*Math.random() + .6) * averageLakeSize;
-        yRadius = (.3*Math.random() + .4) * xRadius;
+        yRadius = (.3*Math.random() + .4) * xRadius; // y-radius < x-radius by definition
         angle = Math.random() * 2 * Math.PI;
 
         for(int i = 0; i < numAttempts; i++)
