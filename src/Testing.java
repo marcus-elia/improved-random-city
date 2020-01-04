@@ -4,6 +4,7 @@ public class Testing
     {
         double tolerance = 0.01;
         testPoint(tolerance);
+        testLake(tolerance);
     }
 
 
@@ -163,6 +164,83 @@ public class Testing
         if (Math.abs(exp - obs) > tolerance) {
             passed = false;
             System.out.println("FAILED test case of 4th quadrant angle.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        if(passed)
+        {
+            System.out.println("All tests passed.");
+        }
+    }
+
+    // ==========================================
+    //
+    //                  Lake
+    //
+    // ==========================================
+    public static void testLake(double tolerance)
+    {
+        System.out.println("\nTesting the Lake Class.");
+        testOverlapping(tolerance);
+    }
+
+    public static void testOverlapping(double tolerance) {
+        boolean passed = true;
+        Point c1, c2;
+        double xRad1, xRad2;
+        boolean exp, obs;
+        System.out.println("\nTesting overlapping of lakes.");
+
+        // The same lake
+        c1 = new Point(0, 0);
+        xRad1 = 10;
+        c2 = c1;
+        xRad2 = xRad1;
+        exp = true;
+        obs = Lake.potentiallyOverlapping(c1, xRad1, c2, xRad2);
+        if (exp != obs) {
+            passed = false;
+            System.out.println("FAILED test case of the same lake.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Lake contained in lake
+        xRad2 = 5;
+        exp = true;
+        obs = Lake.potentiallyOverlapping(c1, xRad1, c2, xRad2);
+        if (exp != obs) {
+            passed = false;
+            System.out.println("FAILED test case of lake contained in lake.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Partial overlap
+        c2 = new Point(10, 0);
+        exp = true;
+        obs = Lake.potentiallyOverlapping(c1, xRad1, c2, xRad2);
+        if (exp != obs) {
+            passed = false;
+            System.out.println("FAILED test case of partial overlap.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Partial overlap, different angle
+        c2 = new Point(-8, -2);
+        exp = true;
+        obs = Lake.potentiallyOverlapping(c1, xRad1, c2, xRad2);
+        if (exp != obs) {
+            passed = false;
+            System.out.println("FAILED test case of partial overlap, different angle.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Non-overlapping
+        c2 = new Point(20, 0);
+        exp = false;
+        obs = Lake.potentiallyOverlapping(c1, xRad1, c2, xRad2);
+        if (exp != obs) {
+            passed = false;
+            System.out.println("FAILED test case of non-overlapping.");
             System.out.println("Expected " + exp + ", observed " + obs);
         }
 
