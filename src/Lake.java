@@ -153,6 +153,6 @@ public class Lake extends GameObject
     // intersection there.
     public static boolean isTooCloseToLake(Point f1, Point f2, double xRadius, Point p, double roadWidth)
     {
-        return Lake.focusDistanceSum(f1, f2, p) < 2*xRadius + roadWidth;
+        return Lake.focusDistanceSum(f1, f2, p) < 2*xRadius + 2*roadWidth;
     }
 }
