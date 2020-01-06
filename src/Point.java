@@ -64,4 +64,12 @@ public class Point
     {
         return new Point(x + distance*Math.cos(angle), y + distance*Math.sin(angle));
     }
+
+    // Return the coordinates of point p relative to this.
+    // For example, if this is (10, 10), then
+    // relativeCoordinates((5,4)) = (-5, -6)
+    public Point relativeCoordinates(Point p)
+    {
+        return new Point(p.x - x, p.y - y);
+    }
 }
