@@ -98,6 +98,8 @@ public class Lake extends GameObject
     public void moveUp(double amount)
     {
         center.y -= amount;
+        focus1.y -= amount;
+        focus2.y -= amount;
         AffineTransform tx = new AffineTransform();
         tx.translate(0, -amount);
         ellipse = tx.createTransformedShape(ellipse);
@@ -105,6 +107,8 @@ public class Lake extends GameObject
     public void moveDown(double amount)
     {
         center.y += amount;
+        focus1.y += amount;
+        focus2.y += amount;
         AffineTransform tx = new AffineTransform();
         tx.translate(0, amount);
         ellipse = tx.createTransformedShape(ellipse);
@@ -112,6 +116,8 @@ public class Lake extends GameObject
     public void moveLeft(double amount)
     {
         center.x -= amount;
+        focus1.x -= amount;
+        focus2.x -= amount;
         AffineTransform tx = new AffineTransform();
         tx.translate(-amount, 0);
         ellipse = tx.createTransformedShape(ellipse);
@@ -119,6 +125,8 @@ public class Lake extends GameObject
     public void moveRight(double amount)
     {
         center.x += amount;
+        focus1.x += amount;
+        focus2.x += amount;
         AffineTransform tx = new AffineTransform();
         tx.translate(amount, 0);
         ellipse = tx.createTransformedShape(ellipse);
