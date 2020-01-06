@@ -7,10 +7,10 @@ public class PerlinNoise
     private double[][] noiseSeed;
     private double[][] perlinNoise;
 
-    public PerlinNoise()
+    public PerlinNoise(int width, int height)
     {
-        outputWidth = 16;
-        outputHeight = 16;
+        outputWidth = width;
+        outputHeight = height;
         noiseSeed = new double[outputWidth][outputHeight];
         perlinNoise = new double[outputWidth][outputHeight];
 
