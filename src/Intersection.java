@@ -23,6 +23,8 @@ public class Intersection extends GameObject
 
     private int maxNumRoads;
 
+    private Color temporaryColor; // For now
+
     public Intersection(GameManager inputManager, Point inputCenter, RoadMap inputRM, int inputMaxNumRoads)
     {
         super(inputManager, inputCenter);
@@ -32,6 +34,8 @@ public class Intersection extends GameObject
         // Initializing lists
         roads = new LinkedList<Road>();
         neighbors = new ArrayList<Intersection>();
+
+        temporaryColor = new Color(0f, maxNumRoads/8.0f, 0, 1);
     }
 
     @Override
@@ -42,8 +46,8 @@ public class Intersection extends GameObject
     @Override
     public void render(Graphics2D g2d)
     {
-        g2d.setColor(Color.MAGENTA);
-        g2d.fill(new Ellipse2D.Double(center.x - 4, center.y - 4, 8, 8));
+        g2d.setColor(temporaryColor);
+        g2d.fill(new Ellipse2D.Double(center.x - 5, center.y - 5, 10, 10));
     }
 
     // ==========================================
