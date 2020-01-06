@@ -163,7 +163,7 @@ public class RoadMap extends GameObject
     {
         cityCenter = new Point(manager.getWidth()/2, manager.getHeight()/2);
         currentRadius = 0;
-        this.addIntersection(new Intersection(manager, cityCenter, this, 8));
+        this.addIntersection(new Intersection(manager, cityCenter, this, 8, averageRoadLength));
     }
 
 
@@ -282,6 +282,16 @@ public class RoadMap extends GameObject
         double noiseValue =  roadDensityMap.getPerlinNoise()[i][j];
         return (int)(noiseValue * 5) + 2;
     }
+    // What should the average road length be for roads leaving this intersection?
+    public int roadLengthByCoords(Point p)
+    {
+        double[][] map = roadDensityMap.getPerlinNoise();
+        int i = (((int)p.x % 2048 + 2048) % 2048) * map.length / 2048;
+        int j = (((int)p.y % 2048 + 2048) % 2048) * map[0].length / 2048;
+
+        double noiseValue =  1 - roadDensityMap.getPerlinNoise()[i][j];
+        return (int)(this.averageRoadLength * noiseValue) + averageRoadLength / 2;
+    }
 
 
     // when we are adding a new road, do we need to make new intersections? If so, we do.
@@ -291,13 +301,15 @@ public class RoadMap extends GameObject
         Intersection startInt = this.hasIntersection(p1);
         if(startInt == null)
         {
-            startInt = new Intersection(manager, p1, this, maxNumRoadsByCoords(p1));
+            startInt = new Intersection(manager, p1, this,
+                    maxNumRoadsByCoords(p1), roadLengthByCoords(p1));
             this.addIntersection(startInt);
         }
         Intersection endInt = this.hasIntersection(p2);
         if(endInt == null)
         {
-            endInt = new Intersection(manager, p2, this, maxNumRoadsByCoords(p2));
+            endInt = new Intersection(manager, p2, this,
+                    maxNumRoadsByCoords(p2), roadLengthByCoords(p2));
             this.addIntersection(endInt);
         }
         return new Intersection[]{startInt, endInt};
@@ -401,7 +413,7 @@ public class RoadMap extends GameObject
                     roadApproved = true;   // We need to keep track of whether the potential road is accepted.
 
                     // get random nearby coordinates to see if we can add a road there
-                    roadLength = (Math.random()*.4 + .8) * this.averageRoadLength;
+                    roadLength = (Math.random()*.4 + .8) * intsec.getAverageRoadLength();
                     roadAngle = this.getRandomAngle();
                     targetPoint = intsec.getCenter().getPointFromHere(roadLength, roadAngle);
 
