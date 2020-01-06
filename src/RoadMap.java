@@ -276,8 +276,8 @@ public class RoadMap extends GameObject
     public int maxNumRoadsByCoords(Point p)
     {
         double[][] map = roadDensityMap.getPerlinNoise();
-        int i = ((int)p.x % 2048) * map.length / 2048;
-        int j = ((int)p.y % 2048) * map[0].length / 2048;
+        int i = (((int)p.x % 2048 + 2048) % 2048) * map.length / 2048;
+        int j = (((int)p.y % 2048 + 2048) % 2048) * map[0].length / 2048;
 
         double noiseValue =  roadDensityMap.getPerlinNoise()[i][j];
         return (int)(noiseValue * 5) + 2;
