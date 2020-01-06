@@ -7,15 +7,22 @@ public class PerlinNoise
     private double[][] noiseSeed;
     private double[][] perlinNoise;
 
-    public PerlinNoise(int width, int height)
+    private double bias; // determines how sharp the noise is
+
+    public PerlinNoise(int width, int height, double inputBias)
     {
         outputWidth = width;
         outputHeight = height;
         noiseSeed = new double[outputWidth][outputHeight];
         perlinNoise = new double[outputWidth][outputHeight];
 
+        bias = inputBias;
+        if(bias < 0)
+        {
+            bias = 0.2;
+        }
         this.fillNoiseSeed();
-        this.perlinNoise = this.calculatePerlinNoise2D(outputWidth, outputHeight, noiseSeed, 4);
+        this.perlinNoise = this.calculatePerlinNoise2D(outputWidth, outputHeight, noiseSeed, 5);
     }
 
 
@@ -98,7 +105,7 @@ public class PerlinNoise
                     pitch /= 2;
 
                     scaleSum += scale;
-                    scale = scale / 2;
+                    scale = scale / bias;
                 }
                 output[i][j] = noise / scaleSum;
             }
