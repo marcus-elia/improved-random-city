@@ -90,8 +90,8 @@ public class PerlinNoise
 
                     double blendX = (i - sampleX1) / (double)pitch;
                     double blendY = (j - sampleY1) / (double)pitch;
-                    double sampleT = (1 - blendX) * seed[sampleY1*width][sampleX1] + blendX * seed[sampleY1*width][sampleX2];
-                    double sampleB = (1 - blendX) * seed[sampleY2*width][sampleX1] + blendX * seed[sampleY2*width][sampleX2];
+                    double sampleT = (1 - blendX) * seed[sampleY1][sampleX1] + blendX * seed[sampleY1][sampleX2];
+                    double sampleB = (1 - blendX) * seed[sampleY2][sampleX1] + blendX * seed[sampleY2][sampleX2];
 
                     noise += (blendY * (sampleB - sampleT) + sampleT) * scale;
 
