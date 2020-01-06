@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 public class RoadMap extends GameObject
@@ -28,6 +29,8 @@ public class RoadMap extends GameObject
 
     // how many times to try
     private int numAttempts;
+
+    private double roadWidth;
 
     // How many pixels long each road is, on average
     private int averageRoadLength;
@@ -74,6 +77,7 @@ public class RoadMap extends GameObject
 
         numAttempts = 5;
 
+        roadWidth = 10;
         averageRoadLength = 40;
 
         perpendicularity = 0.5;
@@ -94,7 +98,7 @@ public class RoadMap extends GameObject
         // If it's time to try to build a new road
         if(ticksSinceLastBuild == ticksBetweenBuilds)
         {
-            if(Math.random() > 0.09)
+            if(Math.random() > 0.05)
             {
                 this.buildNewRoad();
             }
@@ -125,6 +129,7 @@ public class RoadMap extends GameObject
 
     public void render(Graphics2D g2d)
     {
+
         for(Lake l : lakes)
         {
             l.render(g2d);
@@ -184,6 +189,10 @@ public class RoadMap extends GameObject
     public int getCurrentRadius()
     {
         return currentRadius;
+    }
+    public double getRoadWidth()
+    {
+        return roadWidth;
     }
 
     // ==========================================
@@ -330,7 +339,8 @@ public class RoadMap extends GameObject
     {
         for(Lake l : lakes)
         {
-            if(l.containsPoint(p1) || l.containsPoint(p2))
+            if(Lake.isTooCloseToLake(l.getFocus1(), l.getFocus2(), l.getXRadius(), p1, roadWidth) ||
+                    Lake.isTooCloseToLake(l.getFocus1(), l.getFocus2(), l.getXRadius(), p2, roadWidth))
             {
                 return true;
             }
