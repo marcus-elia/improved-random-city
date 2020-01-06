@@ -45,6 +45,10 @@ public class RoadMap extends GameObject
     // The minimum distance we force any two intersections to be away from each other
     private double minIntersectionDistance;
 
+    // This determines how many roads an intersection will have based on the
+    // intersection's coordinates
+    private PerlinNoise roadDensityMap;
+
     // The average size of the lakes' longer radius (lake is ellipse)
     private int averageLakeSize;
 
@@ -81,6 +85,8 @@ public class RoadMap extends GameObject
         averageRoadLength = 40;
 
         perpendicularity = 0.5;
+
+        roadDensityMap = new PerlinNoise(64, 64, 0.2);
 
         intersectionLockOnDistance = 10;
 
@@ -157,7 +163,7 @@ public class RoadMap extends GameObject
     {
         cityCenter = new Point(manager.getWidth()/2, manager.getHeight()/2);
         currentRadius = 0;
-        this.addIntersection(new Intersection(manager, cityCenter, this, 4));
+        this.addIntersection(new Intersection(manager, cityCenter, this, 8));
     }
 
 
@@ -265,6 +271,18 @@ public class RoadMap extends GameObject
         return null;
     }
 
+    // Given a Point p, this returns the max number of roads an intersection at that
+    // point should have.
+    public int maxNumRoadsByCoords(Point p)
+    {
+        double[][] map = roadDensityMap.getPerlinNoise();
+        int i = ((int)p.x % 2048) * map.length / 2048;
+        int j = ((int)p.y % 2048) * map[0].length / 2048;
+
+        double noiseValue =  roadDensityMap.getPerlinNoise()[i][j];
+        return (int)(noiseValue * 5) + 2;
+    }
+
 
     // when we are adding a new road, do we need to make new intersections? If so, we do.
     // In either case, both intersections are returned in an array
@@ -273,13 +291,13 @@ public class RoadMap extends GameObject
         Intersection startInt = this.hasIntersection(p1);
         if(startInt == null)
         {
-            startInt = new Intersection(manager, p1, this, 5);
+            startInt = new Intersection(manager, p1, this, maxNumRoadsByCoords(p1));
             this.addIntersection(startInt);
         }
         Intersection endInt = this.hasIntersection(p2);
         if(endInt == null)
         {
-            endInt = new Intersection(manager, p2, this, 5);
+            endInt = new Intersection(manager, p2, this, maxNumRoadsByCoords(p2));
             this.addIntersection(endInt);
         }
         return new Intersection[]{startInt, endInt};
