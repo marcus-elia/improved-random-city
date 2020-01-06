@@ -15,6 +15,7 @@ public class PerlinNoise
         perlinNoise = new double[outputWidth][outputHeight];
 
         this.fillNoiseSeed();
+        this.perlinNoise = this.calculatePerlinNoise2D(outputWidth, outputHeight, noiseSeed, 4);
     }
 
 
@@ -103,5 +104,16 @@ public class PerlinNoise
             }
         }
         return output;
+    }
+
+
+    // ==========================================
+    //
+    //                Getters
+    //
+    // ==========================================
+    public double[][] getPerlinNoise()
+    {
+        return perlinNoise;
     }
 }
