@@ -280,7 +280,7 @@ public class RoadMap extends GameObject
         int j = (((int)p.y % 2048 + 2048) % 2048) * map[0].length / 2048;
 
         double noiseValue =  roadDensityMap.getPerlinNoise()[i][j];
-        return (int)(noiseValue * 5) + 2;
+        return (int)(noiseValue * 6) + 1;
     }
     // What should the average road length be for roads leaving this intersection?
     public int roadLengthByCoords(Point p)
@@ -290,7 +290,7 @@ public class RoadMap extends GameObject
         int j = (((int)p.y % 2048 + 2048) % 2048) * map[0].length / 2048;
 
         double noiseValue =  1 - roadDensityMap.getPerlinNoise()[i][j];
-        return (int)(this.averageRoadLength * noiseValue) + averageRoadLength / 2;
+        return (int)(this.averageRoadLength * noiseValue) + 2*averageRoadLength / 3;
     }
 
 
