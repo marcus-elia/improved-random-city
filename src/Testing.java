@@ -182,9 +182,11 @@ public class Testing
     {
         System.out.println("\nTesting the Lake Class.");
         testOverlapping(tolerance);
+        testTooClose(tolerance);
     }
 
-    public static void testOverlapping(double tolerance) {
+    public static void testOverlapping(double tolerance)
+    {
         boolean passed = true;
         Point c1, c2;
         double xRad1, xRad2;
@@ -242,6 +244,136 @@ public class Testing
             passed = false;
             System.out.println("FAILED test case of non-overlapping.");
             System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        if(passed)
+        {
+            System.out.println("All tests passed.");
+        }
+    }
+
+    public static void testTooClose(double tolerance)
+    {
+        System.out.println("\nTesting point too close to lake.");
+        boolean passed = true;
+        Point f1, f2, p;
+        double xRadius, roadWidth;
+        boolean exp, obs;
+
+        // Point is the center
+        f1 = new Point(3, 0);
+        f2 = new Point(-3, 0);
+        p = new Point(0,0);
+        xRadius = 5;
+        roadWidth = 1;
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is center");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is a focus
+        p = f1;
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is a focus");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is inside ellipse
+        p = new Point(1, 1);
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is inside ellipse");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is on ellipse
+        p = new Point(0, 4);
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is on ellipse");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point just outside ellipse
+        p = new Point(5.5, 0);
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is just outside ellipse");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point well outside ellipse
+        p = new Point(6.5, 0);
+        exp = false;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is well outside ellipse");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is inside ellipse rotated
+        f1 = new Point(2.12132, 2.12132);
+        f2 = new Point(-2.12132, -2.12132);
+        p = new Point(1, 1);
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is inside ellipse rotated");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is on ellipse rotated
+        p = new Point(3.5355339, 3.5355339);
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is on ellipse rotated");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is just outside ellipse rotated
+        p = new Point(3.7, 3.7);
+        exp = true;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is just outside ellipse rotated");
+            System.out.println("Expected " + exp +", observed " + obs);
+        }
+
+        // Point is well outside ellipse rotated
+        p = new Point(5, 5);
+        exp = false;
+        obs = Lake.isTooCloseToLake(f1, f2, xRadius, p, roadWidth);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of point is just outside ellipse rotated");
+            System.out.println("Expected " + exp +", observed " + obs);
         }
 
         if(passed)
