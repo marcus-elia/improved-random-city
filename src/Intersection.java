@@ -23,13 +23,19 @@ public class Intersection extends GameObject
 
     private int maxNumRoads;
 
+    // The average road length of roads created from this intersection.
+    // Should be chosen based on the Perlin noise.
+    private int averageRoadLength;
+
     private Color temporaryColor; // For now
 
-    public Intersection(GameManager inputManager, Point inputCenter, RoadMap inputRM, int inputMaxNumRoads)
+    public Intersection(GameManager inputManager, Point inputCenter, RoadMap inputRM,
+                        int inputMaxNumRoads, int inputAverageRoadLength)
     {
         super(inputManager, inputCenter);
         rm = inputRM;
         maxNumRoads = inputMaxNumRoads;
+        averageRoadLength = inputAverageRoadLength;
 
         // Initializing lists
         roads = new LinkedList<Road>();
@@ -70,6 +76,10 @@ public class Intersection extends GameObject
     public boolean canHaveNewRoad()
     {
         return roads.size() < maxNumRoads;
+    }
+    public int getAverageRoadLength()
+    {
+        return averageRoadLength;
     }
 
     // ==========================================
