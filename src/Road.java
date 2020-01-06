@@ -15,8 +15,6 @@ public class Road extends GameObject
     // ==========================================
     private Intersection startInt;
     private Intersection endInt;
-    private Point p1;
-    private Point p2;
 
     // Standard properties of a line
     private Optional<Double> slope;  // Optional in case of undefined
