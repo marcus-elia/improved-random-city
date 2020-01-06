@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.*;
+
 public class Testing
 {
     public static void main(String[] args)
@@ -5,6 +8,7 @@ public class Testing
         double tolerance = 0.01;
         testPoint(tolerance);
         testLake(tolerance);
+        testPerlin();
     }
 
 
@@ -380,5 +384,31 @@ public class Testing
         {
             System.out.println("All tests passed.");
         }
+    }
+
+    // ==========================================
+    //
+    //               Perlin Noise
+    //
+    // ==========================================
+    public static void testPerlin()
+    {
+        System.out.println("\nTesting Perlin Noise. Inspect the output.");
+        PerlinNoise pn = new PerlinNoise(64, 64, .2);
+        double[][] output2d = pn.getPerlinNoise();
+
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                System.out.println("Created GUI on EDT? "+
+                        SwingUtilities.isEventDispatchThread());
+                JFrame f = new JFrame("Testing Perlin Noise Generation");
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.add(new PerlinDrawing(output2d));
+                f.pack();
+                f.setVisible(true);
+            }
+        });
     }
 }
