@@ -22,7 +22,8 @@ public class PerlinNoise
             bias = 0.2;
         }
         this.fillNoiseSeed();
-        this.perlinNoise = this.calculatePerlinNoise2D(outputWidth, outputHeight, noiseSeed, 5);
+        this.perlinNoise = this.calculatePerlinNoise2D(outputWidth, outputHeight, noiseSeed,
+                (int)Math.floor(Math.log(Math.min(width, height))));
     }
 
 
