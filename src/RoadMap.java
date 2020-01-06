@@ -82,7 +82,7 @@ public class RoadMap extends GameObject
         numAttempts = 5;
 
         roadWidth = 10;
-        averageRoadLength = 40;
+        averageRoadLength = 60;
 
         perpendicularity = 0.5;
 
@@ -104,7 +104,7 @@ public class RoadMap extends GameObject
         // If it's time to try to build a new road
         if(ticksSinceLastBuild == ticksBetweenBuilds)
         {
-            if(Math.random() > 0.05)
+            if(Math.random() > 0.02)
             {
                 this.buildNewRoad();
             }
