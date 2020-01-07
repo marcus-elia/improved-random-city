@@ -321,7 +321,7 @@ public class RoadMap extends GameObject
     {
         for(Road curRoad : roads)
         {
-            if(curRoad.hitsRoad(p1, p2) ||
+            if(Road.hitsRoad(curRoad.getSlope(), curRoad.getYInt(), curRoad.getStartPoint(), curRoad.getEndPoint(), p1, p2) ||
                     curRoad.directedDistance(p2) < minIntersectionDistance)
             {
                 // also make sure the road we are too close to isn't just coming out
