@@ -306,21 +306,33 @@ public class Road extends GameObject
     public void moveUp(double amount)
     {
         center.y -= amount;
-        yInt = Optional.of(yInt.get() - amount);
+        if(yInt.isPresent())
+        {
+            yInt = Optional.of(yInt.get() - amount);
+        }
     }
     public void moveDown(double amount)
     {
         center.y += amount;
-        yInt = Optional.of(yInt.get() + amount);
+        if(yInt.isPresent())
+        {
+            yInt = Optional.of(yInt.get() + amount);
+        }
     }
     public void moveLeft(double amount)
     {
         center.x -= amount;
-        yInt = Optional.of(yInt.get() + amount*slope.get());
+        if(yInt.isPresent())
+        {
+            yInt = Optional.of(yInt.get() + amount * slope.get());
+        }
     }
     public void moveRight(double amount)
     {
         center.x += amount;
-        yInt = Optional.of(yInt.get() - amount*slope.get());
+        if(yInt.isPresent())
+        {
+            yInt = Optional.of(yInt.get() - amount * slope.get());
+        }
     }
 }
