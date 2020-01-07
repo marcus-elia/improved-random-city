@@ -128,6 +128,14 @@ public class Road extends GameObject
     {
         return endInt.getCenter();
     }
+    public Optional<Double> getSlope()
+    {
+        return slope;
+    }
+    public Optional<Double> getYInt()
+    {
+        return yInt;
+    }
     public double x1()
     {
         return startInt.getCenter().x;
@@ -153,48 +161,52 @@ public class Road extends GameObject
     //          Road Building Functions
     //
     // ==========================================
-    // Return true if this road intersects the road determined by p1 and p2
-    public boolean hitsRoad(Point p1, Point p2)
+    
+    // Return true if the road with slope and yInt, determined by p1 and p2,
+    // intersects the road determined by p3 and p4
+    // This does not handle the case of the two roads being on the same line. It does
+    // not need to, since the program will know that the point is too close
+    public static boolean hitsRoad(Optional<Double> slope, Optional<Double> yInt, Point p1, Point p2,
+                            Point p3, Point p4)
     {
         double xOfIntersection;
         Point temp;
 
-        // Reorder p1 and p2 if needed
-        if(p1.x > p2.x || (p1.x == p2.x && p1.y < p2.y))
+        // Reorder p3 and p4 if needed
+        if(p3.x > p4.x || (p3.x == p4.x && p3.y < p4.y))
         {
-            temp = p1;
-            p1 = p2;
-            p2 = temp;
+            temp = p3;
+            p3 = p4;
+            p4 = temp;
         }
-
         // If both are vertical
-        if(p1.x == p2.x && slope.isEmpty())
+        if(p3.x == p4.x && slope.isEmpty())
         {
             return false;
         }
         // If just the new segment is vertical
-        else if(p1.x == p2.x)
+        else if(p3.x == p4.x)
         {
             // Check that this line a) starts left of the vertical line
             //                      b) ends right of the vertical line
             //                      c) crosses the vertical line higher than its bottom
             //                      d) crosses the vertical line lower than its top
-            return startInt.getCenter().x < p1.x && endInt.getCenter().x > p1.x &&
-                    slope.get()*p1.x + yInt.get() < p1.y && slope.get()*p1.x + yInt.get() > p2.y;
+            return p1.x < p3.x && p2.x > p3.x &&
+                    slope.get()*p3.x + yInt.get() < p3.y && slope.get()*p3.x + yInt.get() > p4.y;
         }
 
         // If we haven't returned yet, then we know the new segment is not vertical. We can find its
         // slope and y-intercept
-        double otherSlope = (p2.y - p1.y) / (double)(p2.x - p1.x);
-        double otherYint = p1.y - otherSlope*p1.x;
+        double otherSlope = (p4.y - p3.y) / (double)(p4.x - p3.x);
+        double otherYint = p3.y - otherSlope*p3.x;
 
         // if just this road is vertical
         if(slope.isEmpty())
         {
             // Same thing as we just did, just the opposite
-            return p1.x < startInt.getCenter().x && p2.x > startInt.getCenter().x &&
-                otherSlope*startInt.getCenter().x + otherYint < startInt.getCenter().y &&
-                otherSlope*startInt.getCenter().x + otherYint > endInt.getCenter().y;
+            return p3.x < p1.x && p4.x > p1.x &&
+                    otherSlope*p1.x + otherYint < p1.y &&
+                    otherSlope*p1.x + otherYint > p2.y;
         }
 
         // If the two segments have the same slope, they do not intersect
@@ -205,8 +217,8 @@ public class Road extends GameObject
 
         // Otherwise, calculate the intersection point normally
         xOfIntersection = (otherYint - yInt.get()) / (slope.get() - otherSlope);
-        return xOfIntersection > startInt.getCenter().x && xOfIntersection < endInt.getCenter().x
-                && xOfIntersection >= p1.x  && xOfIntersection <= p2.x;
+        return xOfIntersection > p1.x && xOfIntersection < p2.x
+                && xOfIntersection >= p3.x  && xOfIntersection <= p4.x;
     }
 
     // This returns the shortest distance between this segment and p. It is either the distance between
