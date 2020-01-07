@@ -67,7 +67,7 @@ public class Road extends GameObject
     public void orderIntersections(Intersection int1, Intersection int2)
     {
         if(int1.getCenter().x < int2.getCenter().x ||
-                (int1.getCenter().x == int2.getCenter().x && int1.getCenter().y > int2.getCenter().y))
+                (Math.abs(int1.getCenter().x - int2.getCenter().x) < 0.001 && int1.getCenter().y > int2.getCenter().y))
         {
             startInt = int1;
             endInt = int2;
