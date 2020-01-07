@@ -49,4 +49,14 @@ public abstract class GameObject
     {
         center.x += amount;
     }
+
+    // ==========================================
+    //
+    //                  Debug
+    //
+    // ==========================================
+    public void printThings()
+    {
+        System.out.println("Object centered at " + center.x + ", " + center.y);
+    }
 }
