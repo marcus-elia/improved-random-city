@@ -80,7 +80,7 @@ public class Road extends GameObject
     }
     public void computeSlope()
     {
-        if(startInt.getCenter().x == endInt.getCenter().x) // x-coordinates are same means vertical
+        if(Math.abs(startInt.getCenter().x - endInt.getCenter().x) < 0.001) // x-coordinates are same means vertical
         {
             slope = Optional.empty();
         }
