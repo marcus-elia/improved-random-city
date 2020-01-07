@@ -161,7 +161,7 @@ public class Road extends GameObject
     //          Road Building Functions
     //
     // ==========================================
-    
+
     // Return true if the road with slope and yInt, determined by p1 and p2,
     // intersects the road determined by p3 and p4
     // This does not handle the case of the two roads being on the same line. It does
@@ -296,5 +296,31 @@ public class Road extends GameObject
         }
         System.out.println("The intersection is not attached to this road.");
         return 0;
+    }
+
+    // ==========================================
+    //
+    //           Scrolling Functions
+    //
+    // ==========================================
+    public void moveUp(double amount)
+    {
+        center.y -= amount;
+        yInt = Optional.of(yInt.get() - amount);
+    }
+    public void moveDown(double amount)
+    {
+        center.y += amount;
+        yInt = Optional.of(yInt.get() + amount);
+    }
+    public void moveLeft(double amount)
+    {
+        center.x -= amount;
+        yInt = Optional.of(yInt.get() + amount*slope.get());
+    }
+    public void moveRight(double amount)
+    {
+        center.x += amount;
+        yInt = Optional.of(yInt.get() - amount*slope.get());
     }
 }
