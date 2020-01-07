@@ -173,19 +173,19 @@ public class Road extends GameObject
         Point temp;
 
         // Reorder p3 and p4 if needed
-        if(p3.x > p4.x || (p3.x == p4.x && p3.y < p4.y))
+        if(p3.x > p4.x || (Math.abs(p3.x - p4.x) < 0.001 && p3.y < p4.y))
         {
             temp = p3;
             p3 = p4;
             p4 = temp;
         }
         // If both are vertical
-        if(p3.x == p4.x && slope.isEmpty())
+        if(Math.abs(p3.x - p4.x) < 0.001 && slope.isEmpty())
         {
             return false;
         }
         // If just the new segment is vertical
-        else if(p3.x == p4.x)
+        else if(Math.abs(p3.x - p4.x) < 0.001)
         {
             // Check that this line a) starts left of the vertical line
             //                      b) ends right of the vertical line
