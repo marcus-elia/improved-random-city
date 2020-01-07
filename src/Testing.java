@@ -655,6 +655,86 @@ public class Testing
             System.out.println("Expected " + exp + ", observed " + obs);
         }
 
+        // Intersection point left of line1
+        slope = Optional.of(1.0);
+        yInt = Optional.of(0.0);
+        p1 = new Point(0,0);
+        p2 = new Point(4, 4);
+        p3 = new Point(-3, 2);
+        p4 = new Point(2, -6);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersection point left of line1.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Intersection point right of line1
+        slope = Optional.of(1.0);
+        yInt = Optional.of(0.0);
+        p1 = new Point(-5,-5);
+        p2 = new Point(-2, -2);
+        p3 = new Point(-3, 2);
+        p4 = new Point(2, -6);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersection point right of line1.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Intersection point left of line2
+        slope = Optional.of(1.0);
+        yInt = Optional.of(0.0);
+        p1 = new Point(0,0);
+        p2 = new Point(4, 4);
+        p3 = new Point(1, -1);
+        p4 = new Point(2, -2);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersection point left of line2.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Intersection point right of line2
+        slope = Optional.of(1.0);
+        yInt = Optional.of(0.0);
+        p1 = new Point(0,0);
+        p2 = new Point(4, 4);
+        p3 = new Point(-3, 2);
+        p4 = new Point(0, -2);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersection point right of line2.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Intersecting
+        slope = Optional.of(1.0);
+        yInt = Optional.of(0.0);
+        p1 = new Point(0,0);
+        p2 = new Point(4, 4);
+        p3 = new Point(0, 4);
+        p4 = new Point(4, 0);
+        exp = true;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersecting.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
         if(passed)
         {
             System.out.println("All tests passed.");
