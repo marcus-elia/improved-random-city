@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 public class Testing
 {
@@ -9,6 +10,7 @@ public class Testing
         testPoint(tolerance);
         testLake(tolerance);
         testPerlin();
+        testRoad(tolerance);
     }
 
 
@@ -394,15 +396,15 @@ public class Testing
     public static void testPerlin()
     {
         System.out.println("\nTesting Perlin Noise. Inspect the output.");
-        PerlinNoise pn = new PerlinNoise(64, 64, .2);
+        PerlinNoise pn = new PerlinNoise(128, 128, .2);
         double[][] output2d = pn.getPerlinNoise();
 
         SwingUtilities.invokeLater(new Runnable()
         {
             public void run()
             {
-                System.out.println("Created GUI on EDT? "+
-                        SwingUtilities.isEventDispatchThread());
+                //System.out.println("Created GUI on EDT? "+
+                //        SwingUtilities.isEventDispatchThread());
                 JFrame f = new JFrame("Testing Perlin Noise Generation");
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.add(new PerlinDrawing(output2d));
@@ -410,5 +412,252 @@ public class Testing
                 f.setVisible(true);
             }
         });
+    }
+
+    // ==========================================
+    //
+    //                  Road
+    //
+    // ==========================================
+    public static void testRoad(double tolerance)
+    {
+        System.out.println("\nTesting the Road Class.");
+        testHitsRoad(tolerance);
+    }
+
+    public static void testHitsRoad(double tolerance)
+    {
+        System.out.println("\nTesting roads hitting each other.");
+
+        boolean passed = true;
+        Optional<Double> slope;
+        Optional<Double> yInt;
+        Point p1, p2, p3, p4;
+        boolean exp, obs;
+
+        // Both vertical
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(1,0);
+        p2 = new Point(1, 5);
+        p3 = new Point(2, 1);
+        p4 = new Point(2, 4);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of both vertical lines.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Both horizontal
+        slope = Optional.of(0.0);
+        yInt = Optional.of(1.0);
+        p1 = new Point(-4,1);
+        p2 = new Point(3, 1);
+        p3 = new Point(2, 4);
+        p4 = new Point(5, 4);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of both horiztonal lines.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Parallel diagonal
+        slope = Optional.of(1.0);
+        yInt = Optional.of(2.0);
+        p1 = new Point(0,2);
+        p2 = new Point(3, 5);
+        p3 = new Point(2, 0);
+        p4 = new Point(4, 2);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of parallel diagonal lines.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // p3 and p4 reversed
+        p3 = new Point(4, 2);
+        p4 = new Point(2, 0);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of p3 and p4 reversed.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line1 vertical, but to the right
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(1,0);
+        p2 = new Point(1, 5);
+        p3 = new Point(1.5, 3);
+        p4 = new Point(5.5, 3);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line1 vertical, but to the right.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line1 vertical, but to the left
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(1,0);
+        p2 = new Point(1, 5);
+        p3 = new Point(-5.5, 3);
+        p4 = new Point(-1.5, 3);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line1 vertical, but to the left.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line1 vertical, but too high
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(1,0);
+        p2 = new Point(1, 5);
+        p3 = new Point(-1.5, -3);
+        p4 = new Point(5.5, -3);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line1 vertical, but too high.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line1 vertical, but too low
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(1,0);
+        p2 = new Point(1, 5);
+        p3 = new Point(-1.5, 7);
+        p4 = new Point(5.5, 7);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line1 vertical, but too low.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line1 vertical, intersecting
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(1,5);
+        p2 = new Point(1, 0);
+        p3 = new Point(-1.5, 3);
+        p4 = new Point(5.5, 3);
+        exp = true;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line1 vertical, intersecting.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line2 vertical, but to the right
+        slope = Optional.of(0.0);
+        yInt = Optional.of(2.0);
+        p1 = new Point(1.5,2);
+        p2 = new Point(3.5, 2);
+        p3 = new Point(1, -1);
+        p4 = new Point(1, 6);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line2 vertical, but to the right.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line2 vertical, but to the left
+        slope = Optional.of(0.0);
+        yInt = Optional.of(2.0);
+        p1 = new Point(-3.5,2);
+        p2 = new Point(-1.5, 2);
+        p3 = new Point(1, -1);
+        p4 = new Point(1, 6);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line2 vertical, but to the left.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line2 vertical, but too high
+        slope = Optional.of(0.0);
+        yInt = Optional.of(-4.0);
+        p1 = new Point(-3.5,-4);
+        p2 = new Point(3.5, -4);
+        p3 = new Point(1, -1);
+        p4 = new Point(1, 6);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line2 vertical, but too high.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line2 vertical, but too low
+        slope = Optional.of(0.0);
+        yInt = Optional.of(8.0);
+        p1 = new Point(-3.5,8);
+        p2 = new Point(3.5, 8);
+        p3 = new Point(1, -1);
+        p4 = new Point(1, 6);
+        exp = false;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line2 vertical, but too low.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Line2 vertical, intersecting
+        slope = Optional.of(0.0);
+        yInt = Optional.of(2.0);
+        p1 = new Point(-1.5,2);
+        p2 = new Point(3.5, 2);
+        p3 = new Point(1, -1);
+        p4 = new Point(1, 6);
+        exp = true;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of line2 vertical, intersecting.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        if(passed)
+        {
+            System.out.println("All tests passed.");
+        }
     }
 }
