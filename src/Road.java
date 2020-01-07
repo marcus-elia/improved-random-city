@@ -350,7 +350,10 @@ public class Road extends GameObject
     public void printThings()
     {
         System.out.println("Road centered at " + center.x + ", " + center.y);
-        System.out.println("\tSlope: " + slope.get());
+        if(slope.isPresent())
+        {
+            System.out.println("\tSlope: " + slope.get());
+        }
         System.out.println("\tStart: " + getStartPoint().x + ", " + getStartPoint().y);
         System.out.println("\tEnd: " + getEndPoint().x + ", " + getEndPoint().y);
     }
