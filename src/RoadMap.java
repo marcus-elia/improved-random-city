@@ -321,8 +321,13 @@ public class RoadMap extends GameObject
     {
         for(Road curRoad : roads)
         {
-            if(Road.hitsRoad(curRoad.getSlope(), curRoad.getYInt(), curRoad.getStartPoint(), curRoad.getEndPoint(), p1, p2) ||
-                    curRoad.directedDistance(p2) < minIntersectionDistance)
+            // If we intersect another road, definitely bad
+            if(curRoad.hitsRoad(p1, p2))
+            {
+                return true;
+            }
+            // If the other road passes too close to p2
+            if(curRoad.directedDistance(p2) < minIntersectionDistance)
             {
                 // also make sure the road we are too close to isn't just coming out
                 // from our target intersection we are connecting to.
@@ -330,6 +335,8 @@ public class RoadMap extends GameObject
                 {
                     return true;
                 }
+                // If the road that is too close to p2 actually connects to the existing
+                // intersection at p2, it wouldn't be a problem
                 if(!connectTo.getRoads().contains(curRoad))
                 {
                     return true;
