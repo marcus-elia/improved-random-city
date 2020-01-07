@@ -188,6 +188,19 @@ public class GameManager
         }
     }
 
+    // Print debug stats about whatever object is closest to the click.
+    public void reactToClick(int mx, int my)
+    {
+        Point p = new Point(mx, my);
+        for(GameObject obj : gameObjects)
+        {
+            if(obj.getCenter().distanceToPoint(p) < 6)
+            {
+                obj.printThings();
+            }
+        }
+    }
+
 
 
 
