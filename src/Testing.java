@@ -767,6 +767,38 @@ public class Testing
             System.out.println("Expected " + exp + ", observed " + obs);
         }
 
+        // Intersecting Case 3a
+        slope = Optional.of(0.0);
+        yInt = Optional.of(71.8578643762689);
+        p1 = new Point(333.0113785117154, 71.8578643762689);
+        p2 = new Point(416.8853241338556, 71.8578643762689);
+        p3 = new Point(381.2073470594726, 102.16405906440352);
+        p4 = new Point(381.2073470594726, 41.23055082978132);
+        exp = true;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersecting case 3a.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
+        // Intersecting Case 3b
+        slope = Optional.empty();
+        yInt = Optional.empty();
+        p1 = new Point(381.2073470594726, 102.16405906440352);
+        p2 = new Point(381.2073470594726, 41.23055082978132);
+        p3 = new Point(333.0113785117154, 71.8578643762689);
+        p4 = new Point(416.8853241338556, 71.8578643762689);
+        exp = true;
+        obs = Road.hitsRoad(slope, yInt, p1, p2, p3, p4);
+        if(exp != obs)
+        {
+            passed = false;
+            System.out.println("FAILED test case of intersecting case 3b.");
+            System.out.println("Expected " + exp + ", observed " + obs);
+        }
+
         if(passed)
         {
             System.out.println("All tests passed.");
