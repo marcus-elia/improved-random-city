@@ -174,4 +174,16 @@ public class Intersection extends GameObject
         double tolerance = .4;
         return center.distanceToPoint(p) < tolerance;
     }
+
+
+    // ==========================================
+    //
+    //                  Debug
+    //
+    // ==========================================
+    public void printThings()
+    {
+        System.out.println("Intersection at " + center.x + ", " + center.y);
+        System.out.println("\tNum roads: " + roads.size());
+    }
 }
