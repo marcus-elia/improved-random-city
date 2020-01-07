@@ -221,6 +221,12 @@ public class Road extends GameObject
                 && xOfIntersection >= p3.x  && xOfIntersection <= p4.x;
     }
 
+    // Wrapper function. Returns true if the segment determined by p1 and p2 hits this road
+    public boolean hitsRoad(Point p1, Point p2)
+    {
+        return Road.hitsRoad(slope, yInt, getStartPoint(), getEndPoint(), p1, p2);
+    }
+
     // This returns the shortest distance between this segment and p. It is either the distance between
     // p and one of the endpoints, or the true perpendicular directed distance
     public double directedDistance(Point p)
