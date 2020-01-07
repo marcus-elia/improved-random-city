@@ -84,7 +84,7 @@ public class RoadMap extends GameObject
         roadWidth = 10;
         averageRoadLength = 60;
 
-        perpendicularity = 0.5;
+        perpendicularity = 1;
 
         roadDensityMap = new PerlinNoise(64, 64, 0.2);
 
@@ -518,6 +518,31 @@ public class RoadMap extends GameObject
             {
                 this.addLake(new Lake(manager, targetPoint, xRadius, yRadius, angle));
                 return;
+            }
+        }
+    }
+
+    // Iterates through all pairs of roads to see if any intersections happen.
+    public void checkAllRoadsAndPrint()
+    {
+        for(int i = 0; i < roads.size() - 1; i++)
+        {
+            Road r1 = roads.get(i);
+            for(int j = i + 1; j < roads.size(); j++)
+            {
+                Road r2 = roads.get(j);
+                if(r1.hitsRoad(r2.getStartPoint(), r2.getEndPoint()))
+                {
+                    if(!r1.getStartInt().equals(r2.getStartInt()) &&
+                    !r1.getEndInt().equals(r2.getStartInt()) &&
+                    !r1.getStartInt().equals(r2.getEndInt()) &&
+                    !r1.getEndInt().equals(r2.getEndInt()))
+                    {
+                        System.out.println("\n=======Problem==========");
+                        roads.get(i).printThings();
+                        roads.get(j).printThings();
+                    }
+                }
             }
         }
     }
