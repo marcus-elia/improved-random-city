@@ -359,6 +359,10 @@ public class Intersection extends GameObject
     // fills the center of the intersection
     public void updateIntersectionFill()
     {
+        if(roads.size() < 2) // If this was the first road, return. There is not fill yet.
+        {
+            return;
+        }
         this.intersectionFill = new Path2D.Double();
         this.intersectionFill.moveTo(intersectionFillPoints.get(0).x,
                 intersectionFillPoints.get(0).y);
