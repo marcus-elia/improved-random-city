@@ -266,27 +266,41 @@ public class Intersection extends GameObject
     // this adds points to the intersectionFillPoints list as needed (either 1 or 2).
     public void addPointsToIntersectionFill(Road prevRoad, Road curRoad)
     {
-        // Get the corner Points of the rectangle for each road
-        Point prevStartR = prevRoad.getStartRight();
-        Point prevStartL = prevRoad.getStartLeft();
-        Point prevEndR = prevRoad.getEndRight();
-        Point prevEndL = prevRoad.getEndLeft();
-        Point curStartR = curRoad.getStartRight();
-        Point curStartL = curRoad.getStartLeft();
-        Point curEndR = curRoad.getEndRight();
-        Point curEndL = curRoad.getEndLeft();
-
         // Get the angle between the two roads. Note that if curRoad is in quadrant I and prevRoad is
         // in quadrant IV, the difference will be less than negative Pi.
         double angleDifference = curRoad.getAngleFromIntersection(this)
                 - prevRoad.getAngleFromIntersection(this);
 
-        // if the two roads form an angle that is less than 180,
-        // just draw to their intersection point
+        // If the two roads form an angle that is less than 180,
+        // just add their intersection point
         if((angleDifference > 0 && angleDifference < Math.PI) ||
                 (angleDifference > -2*Math.PI && angleDifference < -Math.PI))
         {
-            this.roadsIntersection(prevRoad, curRoad);
+            this.intersectionFillPoints.add(this.roadsIntersection(prevRoad, curRoad));
+        }
+        // Otherwise, add both of the roads' endpoints to make sure the polygon is convex
+        // (this is a spot where a wedge would be missing if we just drew the roads and
+        // no intersection fill).
+        else
+        {
+            // Add the correct corner from the previous road
+            if(prevRoad.getStartInt().equals(this))
+            {
+                intersectionFillPoints.add(prevRoad.getStartRight());
+            }
+            else
+            {
+                intersectionFillPoints.add(prevRoad.getEndLeft());
+            }
+            // Add the correct corner from the current road
+            if(curRoad.getStartInt().equals(this))
+            {
+                intersectionFillPoints.add(curRoad.getStartLeft());
+            }
+            else
+            {
+                intersectionFillPoints.add(curRoad.getEndRight());
+            }
         }
     }
 
