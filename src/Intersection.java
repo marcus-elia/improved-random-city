@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
@@ -654,6 +655,41 @@ public class Intersection extends GameObject
             }
         }
     }*/
+
+
+    // ==========================================
+    //
+    //           Scrolling Functions
+    //
+    // ==========================================
+    public void moveUp(double amount)
+    {
+        center.y -= amount;
+        AffineTransform tx = new AffineTransform();
+        tx.translate(0, -amount);
+        intersectionFill = (Path2D) tx.createTransformedShape(intersectionFill);
+    }
+    public void moveDown(double amount)
+    {
+        center.y += amount;
+        AffineTransform tx = new AffineTransform();
+        tx.translate(0, amount);
+        intersectionFill = (Path2D) tx.createTransformedShape(intersectionFill);
+    }
+    public void moveLeft(double amount)
+    {
+        center.x -= amount;
+        AffineTransform tx = new AffineTransform();
+        tx.translate(-amount, 0);
+        intersectionFill = (Path2D) tx.createTransformedShape(intersectionFill);
+    }
+    public void moveRight(double amount)
+    {
+        center.x += amount;
+        AffineTransform tx = new AffineTransform();
+        tx.translate(amount, 0);
+        intersectionFill = (Path2D) tx.createTransformedShape(intersectionFill);
+    }
 
 
     // ==========================================
