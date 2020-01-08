@@ -329,7 +329,14 @@ public class Intersection extends GameObject
 
             this.addPointsToIntersectionFill(prevRoad, curRoad);
 
-
+            // Now iterate through all the roads
+            iter.next();
+            while(iter.hasNext())
+            {
+                prevRoad = curRoad;
+                curRoad = iter.next();
+                this.addPointsToIntersectionFill(prevRoad, curRoad);
+            }
         }
     }
 
