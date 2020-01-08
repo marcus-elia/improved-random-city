@@ -25,6 +25,7 @@ public class MouseInput implements MouseListener
         int my = e.getY();
 
         manager.reactToClick(mx, my);
+        //manager.getRM().checkAllRoadsAndPrint();
     }
 
     @Override
