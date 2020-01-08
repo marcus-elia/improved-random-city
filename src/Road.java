@@ -28,9 +28,8 @@ public class Road extends GameObject
     //
     // ==========================================
     private double roadWidth;
-    // the coordinates that determine where the road is drawn in 2D
-    private double startRightX, startRightY, endRightX, endRightY,
-            startLeftX, startLeftY, endLeftX, endLeftY;
+    // the Points that determine where the road is drawn in 2D
+    private Point startRight, endRight, startLeft, endLeft;
 
     // ==========================================
     //
@@ -125,40 +124,28 @@ public class Road extends GameObject
         // vertical line case
         if(slope.isEmpty())
         {
-            this.startRightX = x1() + roadWidth;
-            this.startRightY = y1();
-            this.endRightX = x1() + roadWidth;
-            this.endRightY = y2();
-            this.startLeftX = x1() - roadWidth;
-            this.startLeftY = y1();
-            this.endLeftX = x1() - roadWidth;
-            this.endLeftY = y2();
+            this.startRight = new Point(x1() + roadWidth, y1());
+            this.endRight = new Point(x1() + roadWidth, y2());
+            this.startLeft = new Point(x1() - roadWidth, y1());
+            this.endLeft = new Point(x1() - roadWidth, y2());
         }
         // negative slope
         else if(slope.get() < 0)
         {
             double angleC = Math.PI/2 - Math.abs(Math.atan(slope.get())); // complement angle
-            this.startRightX = this.x1() + Math.cos(angleC)*roadWidth;
-            this.startRightY = this.y1() + Math.sin(angleC)*roadWidth;
-            this.startLeftX = this.x1() - Math.cos(angleC)*roadWidth;
-            this.startLeftY = this.y1() - Math.sin(angleC)*roadWidth;
-            this.endRightX = this.x2() + Math.cos(angleC)*roadWidth;
-            this.endRightY = this.y2() + Math.sin(angleC)*roadWidth;
-            this.endLeftX = this.x2() - Math.cos(angleC)*roadWidth;
-            this.endLeftY = this.y2() - Math.sin(angleC)*roadWidth;
+            this.startRight = new Point(x1() + Math.cos(angleC)*roadWidth,y1() + Math.sin(angleC)*roadWidth);
+            this.startLeft = new Point(x1() - Math.cos(angleC)*roadWidth, y1() - Math.sin(angleC)*roadWidth);
+            this.endRight = new Point(x2() + Math.cos(angleC)*roadWidth, y2() + Math.sin(angleC)*roadWidth);
+            this.endLeft = new Point(x2() - Math.cos(angleC)*roadWidth, y2() - Math.sin(angleC)*roadWidth);
         }
         // positive slope
         else
         {
             double angleC = Math.PI/2 - Math.abs(Math.atan(slope.get())); // complement angle
-            this.startRightX = this.x1() - Math.cos(angleC)*roadWidth;
-            this.startRightY = this.y1() + Math.sin(angleC)*roadWidth;
-            this.startLeftX = this.x1() + Math.cos(angleC)*roadWidth;
-            this.startLeftY = this.y1() - Math.sin(angleC)*roadWidth;
-            this.endRightX = this.x2() - Math.cos(angleC)*roadWidth;
-            this.endRightY = this.y2() + Math.sin(angleC)*roadWidth;
-            this.endLeftX = this.x2() + Math.cos(angleC)*roadWidth;
-            this.endLeftY = this.y2() - Math.sin(angleC)*roadWidth;
+            this.startRight = new Point(x1() - Math.cos(angleC)*roadWidth, y1() + Math.sin(angleC)*roadWidth);
+            this.startLeft = new Point(x1() + Math.cos(angleC)*roadWidth, y1() - Math.sin(angleC)*roadWidth);
+            this.endRight = new Point(x2() - Math.cos(angleC)*roadWidth, y2() + Math.sin(angleC)*roadWidth);
+            this.endLeft = new Point(x2() + Math.cos(angleC)*roadWidth, y2() - Math.sin(angleC)*roadWidth);
         }
     }
 
@@ -209,10 +196,26 @@ public class Road extends GameObject
     }
 
     // Return the actual coordinates where the road is drawn
-    public double[] getDrawCoordinates()
+    /*public double[] getDrawCoordinates()
     {
         return new double[]{startRightX, startRightY, endRightX,
                 endRightY, startLeftX, startLeftY, endLeftX, endLeftY};
+    }*/
+    public Point getStartRight()
+    {
+        return startRight;
+    }
+    public Point getEndRight()
+    {
+        return endRight;
+    }
+    public Point getStartLeft()
+    {
+        return startLeft;
+    }
+    public Point getEndLeft()
+    {
+        return endLeft;
     }
 
 
