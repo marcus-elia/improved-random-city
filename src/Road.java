@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class Road extends GameObject
     private Point startRight, endRight, startLeft, endLeft;
 
     private Path2D rectangle;
-    private Line2D centerStripe;
+    private Shape centerStripe;
 
     // ==========================================
     //
@@ -404,6 +405,10 @@ public class Road extends GameObject
         {
             yInt = Optional.of(yInt.get() - amount);
         }
+        AffineTransform tx = new AffineTransform();
+        tx.translate(0, -amount);
+        rectangle = (Path2D) tx.createTransformedShape(rectangle);
+        centerStripe = tx.createTransformedShape(centerStripe);
     }
     public void moveDown(double amount)
     {
@@ -412,6 +417,10 @@ public class Road extends GameObject
         {
             yInt = Optional.of(yInt.get() + amount);
         }
+        AffineTransform tx = new AffineTransform();
+        tx.translate(0, amount);
+        rectangle = (Path2D) tx.createTransformedShape(rectangle);
+        centerStripe = tx.createTransformedShape(centerStripe);
     }
     public void moveLeft(double amount)
     {
@@ -420,6 +429,10 @@ public class Road extends GameObject
         {
             yInt = Optional.of(yInt.get() + amount * slope.get());
         }
+        AffineTransform tx = new AffineTransform();
+        tx.translate(-amount, 0);
+        rectangle = (Path2D) tx.createTransformedShape(rectangle);
+        centerStripe = tx.createTransformedShape(centerStripe);
     }
     public void moveRight(double amount)
     {
@@ -428,6 +441,10 @@ public class Road extends GameObject
         {
             yInt = Optional.of(yInt.get() - amount * slope.get());
         }
+        AffineTransform tx = new AffineTransform();
+        tx.translate(amount, 0);
+        rectangle = (Path2D) tx.createTransformedShape(rectangle);
+        centerStripe = tx.createTransformedShape(centerStripe);
     }
 
     // ==========================================
