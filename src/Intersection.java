@@ -54,8 +54,18 @@ public class Intersection extends GameObject
     @Override
     public void render(Graphics2D g2d)
     {
-        g2d.setColor(temporaryColor);
-        g2d.fill(new Ellipse2D.Double(center.x - 5, center.y - 5, 10, 10));
+        //g2d.setColor(temporaryColor);
+        //g2d.fill(new Ellipse2D.Double(center.x - 5, center.y - 5, 10, 10));
+        g2d.setColor(Color.GRAY);
+
+        // If there is 1 road (or none), just draw a circle for the dead end
+        if(roads.size() < 2)
+        {
+            g2d.fill(new Ellipse2D.Double(center.x - rm.getRoadWidth(), center.y - rm.getRoadWidth(),
+                    2*rm.getRoadWidth(), 2*rm.getRoadWidth()));
+        }
+        // But if we have multiple roads, do the intersection fill.
+        g2d.fill(this.intersectionFill);
     }
 
     // ==========================================
@@ -93,6 +103,7 @@ public class Intersection extends GameObject
     // Add a Road which starts or ends at this Intersection
     // If boolean startsHere == true, then the road starts at this intersection
     // Otherwise, it ends here.
+    // Also calls functions to update the intersection fill.
     public void addRoad(Road r, boolean startsHere)
     {
         // Add the other side of the road to the neighbors here
@@ -106,7 +117,7 @@ public class Intersection extends GameObject
         }
 
 
-        // put the road in proper spot in the linked list
+        // Put the road in proper spot in the linked list
         double angleToAdd = r.getAngleFromIntersection(this);
         if(this.roads.isEmpty() || angleToAdd < roads.getFirst().getAngleFromIntersection(this))
         {
@@ -126,15 +137,15 @@ public class Intersection extends GameObject
                 {
                     iter.previous();
                     iter.add(r);
-                    //this.updateIntersectionFillPoints();
-                    //this.updateIntersectionFill();
+                    this.updateIntersectionFillPoints();
+                    this.updateIntersectionFill();
                     return;
                 }
             }
             roads.addLast(r);
         }
-        //this.updateIntersectionFillPoints();
-        //this.updateIntersectionFill();
+        this.updateIntersectionFillPoints();
+        this.updateIntersectionFill();
     }
 
 
@@ -340,10 +351,26 @@ public class Intersection extends GameObject
         }
     }
 
+    // Whenever we add a new road, we need to update the Path2D that
+    // fills the center of the intersection
+    public void updateIntersectionFill()
+    {
+        this.intersectionFill = new Path2D.Double();
+        this.intersectionFill.moveTo(intersectionFillPoints.get(0).x,
+                intersectionFillPoints.get(0).y);
+
+        for(int i = 1; i < intersectionFillPoints.size(); i++)
+        {
+            intersectionFill.lineTo(intersectionFillPoints.get(i).x,
+                    intersectionFillPoints.get(i).y);
+        }
+        intersectionFill.closePath();
+    }
+
 
 
     // update the points that are used in the Path2D object that fills in the intersection
-    public void updateIntersectionFillPointsOLD()
+    /*public void updateIntersectionFillPointsOLD()
     {
         // if we have more than one road, calculate things based upon that
         if(roads.size() > 1)
