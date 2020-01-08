@@ -484,10 +484,10 @@ public class RoadMap extends GameObject
                             p2 = intsec.getCenter();
                         }
                         Intersection[] roadInts = this.addIntersectionsIfNeeded(p1, p2);
-                        Point center = new Point((intsec.getCenter().x + targetPoint.x)/2,
+                        Point centerOfSegment = new Point((intsec.getCenter().x + targetPoint.x)/2,
                                 (intsec.getCenter().y + targetPoint.y)/2);
-                        this.addRoad(new Road(manager, center,this, ++numRoads,
-                                roadInts[0], roadInts[1]));
+                        this.addRoad(new Road(manager, centerOfSegment,this, ++numRoads,
+                                roadInts[0], roadInts[1], roadWidth));
                         return;
                     }
                 }
@@ -525,6 +525,7 @@ public class RoadMap extends GameObject
     // Iterates through all pairs of roads to see if any intersections happen.
     public void checkAllRoadsAndPrint()
     {
+        boolean problem = false;
         for(int i = 0; i < roads.size() - 1; i++)
         {
             Road r1 = roads.get(i);
@@ -541,9 +542,14 @@ public class RoadMap extends GameObject
                         System.out.println("\n=======Problem==========");
                         roads.get(i).printThings();
                         roads.get(j).printThings();
+                        problem = true;
                     }
                 }
             }
+        }
+        if(!problem)
+        {
+            System.out.println("No problems");
         }
     }
 }
