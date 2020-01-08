@@ -21,6 +21,17 @@ public class Road extends GameObject
     private Optional<Double> yInt;   // Extending the segment to the y-axis
     private double angle;            // The angle from the first point to the second point
 
+
+    // ==========================================
+    //
+    //            For Drawing the Road
+    //
+    // ==========================================
+    private double roadWidth;
+    // the coordinates that determine where the road is drawn in 2D
+    private double startRightX, startRightY, endRightX, endRightY,
+            startLeftX, startLeftY, endLeftX, endLeftY;
+
     // ==========================================
     //
     //          Game Management Fields
@@ -32,15 +43,17 @@ public class Road extends GameObject
     private int ID;
 
     public Road(GameManager inputManager, Point inputCenter, RoadMap inputRM, int inputID,
-                Intersection inputStartInt, Intersection inputEndInt)
+                Intersection inputStartInt, Intersection inputEndInt, double inputRoadWidth)
     {
         super(inputManager, inputCenter);
         rm = inputRM;
+        roadWidth = inputRoadWidth;
         this.ID = inputID;
         this.orderIntersections(inputStartInt, inputEndInt);
         this.computeSlope();
         this.computeYInt();
         this.computeAngle();
+        this.setDrawPoints();
     }
 
 
@@ -107,6 +120,48 @@ public class Road extends GameObject
     }
 
 
+    public void setDrawPoints()
+    {
+        // vertical line case
+        if(slope.isEmpty())
+        {
+            this.startRightX = x1() + roadWidth;
+            this.startRightY = y1();
+            this.endRightX = x1() + roadWidth;
+            this.endRightY = y2();
+            this.startLeftX = x1() - roadWidth;
+            this.startLeftY = y1();
+            this.endLeftX = x1() - roadWidth;
+            this.endLeftY = y2();
+        }
+        // negative slope
+        else if(slope.get() < 0)
+        {
+            double angleC = Math.PI/2 - Math.abs(Math.atan(slope.get())); // complement angle
+            this.startRightX = this.x1() + Math.cos(angleC)*roadWidth;
+            this.startRightY = this.y1() + Math.sin(angleC)*roadWidth;
+            this.startLeftX = this.x1() - Math.cos(angleC)*roadWidth;
+            this.startLeftY = this.y1() - Math.sin(angleC)*roadWidth;
+            this.endRightX = this.x2() + Math.cos(angleC)*roadWidth;
+            this.endRightY = this.y2() + Math.sin(angleC)*roadWidth;
+            this.endLeftX = this.x2() - Math.cos(angleC)*roadWidth;
+            this.endLeftY = this.y2() - Math.sin(angleC)*roadWidth;
+        }
+        // positive slope
+        else
+        {
+            double angleC = Math.PI/2 - Math.abs(Math.atan(slope.get())); // complement angle
+            this.startRightX = this.x1() - Math.cos(angleC)*roadWidth;
+            this.startRightY = this.y1() + Math.sin(angleC)*roadWidth;
+            this.startLeftX = this.x1() + Math.cos(angleC)*roadWidth;
+            this.startLeftY = this.y1() - Math.sin(angleC)*roadWidth;
+            this.endRightX = this.x2() - Math.cos(angleC)*roadWidth;
+            this.endRightY = this.y2() + Math.sin(angleC)*roadWidth;
+            this.endLeftX = this.x2() + Math.cos(angleC)*roadWidth;
+            this.endLeftY = this.y2() - Math.sin(angleC)*roadWidth;
+        }
+    }
+
     // ==========================================
     //
     //                 Getters
@@ -151,6 +206,13 @@ public class Road extends GameObject
     public double y2()
     {
         return endInt.getCenter().y;
+    }
+
+    // Return the actual coordinates where the road is drawn
+    public double[] getDrawCoordinates()
+    {
+        return new double[]{startRightX, startRightY, endRightX,
+                endRightY, startLeftX, startLeftY, endLeftX, endLeftY};
     }
 
 
