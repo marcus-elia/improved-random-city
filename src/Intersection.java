@@ -66,7 +66,10 @@ public class Intersection extends GameObject
                     2*rm.getRoadWidth(), 2*rm.getRoadWidth()));
         }
         // But if we have multiple roads, do the intersection fill.
-        g2d.fill(this.intersectionFill);
+        else
+        {
+            g2d.fill(this.intersectionFill);
+        }
     }
 
     // ==========================================
