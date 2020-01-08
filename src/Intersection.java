@@ -57,7 +57,7 @@ public class Intersection extends GameObject
     {
         //g2d.setColor(temporaryColor);
         //g2d.fill(new Ellipse2D.Double(center.x - 5, center.y - 5, 10, 10));
-        g2d.setColor(Color.GRAY);
+        g2d.setColor(temporaryColor);
 
         // If there is 1 road (or none), just draw a circle for the dead end
         if(roads.size() < 2)
@@ -302,7 +302,7 @@ public class Intersection extends GameObject
         }
         // If the two roads form an angle that is less than 180,
         // just add their intersection point
-        if((angleDifference > 0 && angleDifference < Math.PI) ||
+        else if((angleDifference > 0 && angleDifference < Math.PI) ||
                 (angleDifference > -2*Math.PI && angleDifference < -Math.PI))
         {
             this.intersectionFillPoints.add(this.roadsIntersection(prevRoad, curRoad));
