@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.util.Optional;
 
 // A road is fundamentally two points with a segment connecting them.
@@ -31,6 +32,9 @@ public class Road extends GameObject
     // the Points that determine where the road is drawn in 2D
     private Point startRight, endRight, startLeft, endLeft;
 
+    private Path2D rectangle;
+    private Line2D centerStripe;
+
     // ==========================================
     //
     //          Game Management Fields
@@ -53,6 +57,8 @@ public class Road extends GameObject
         this.computeYInt();
         this.computeAngle();
         this.setDrawPoints();
+        this.setRectangle();
+        this.setCenterStripe();
     }
 
 
@@ -65,9 +71,10 @@ public class Road extends GameObject
     @Override
     public void render(Graphics2D g2d)
     {
-        g2d.setColor(Color.RED);
-        Line2D line = new Line2D.Double(x1(), y1(), x2(), y2());
-        g2d.draw(line);
+        g2d.setColor(Color.GRAY);
+        g2d.fill(rectangle);
+        g2d.setColor(Color.YELLOW);
+        g2d.draw(centerStripe);
     }
 
     // ==========================================
@@ -147,6 +154,22 @@ public class Road extends GameObject
             this.endRight = new Point(x2() - Math.cos(angleC)*roadWidth, y2() + Math.sin(angleC)*roadWidth);
             this.endLeft = new Point(x2() + Math.cos(angleC)*roadWidth, y2() - Math.sin(angleC)*roadWidth);
         }
+    }
+
+    public void setRectangle()
+    {
+        rectangle = new Path2D.Double();
+        rectangle.moveTo(startRight.x, startRight.y);
+        rectangle.lineTo(startLeft.x, startLeft.y);
+        rectangle.lineTo(endLeft.x, endLeft.y);
+        rectangle.lineTo(endRight.x, endRight.y);
+        rectangle.lineTo(startRight.x, startRight.y);
+    }
+    public void setCenterStripe()
+    {
+        Point startMidPoint = Point.midPoint(startLeft, startRight);
+        Point endMidPoint = Point.midPoint(endLeft, endRight);
+        centerStripe = new Line2D.Double(startMidPoint.x, startMidPoint.y, endMidPoint.x, endMidPoint.y);
     }
 
     // ==========================================
