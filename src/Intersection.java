@@ -229,31 +229,34 @@ public class Intersection extends GameObject
     }
 
     // Given that two roads intersect at this Intersection, this finds the point where
-    // their lines actually hit
-    public Point roadsIntersection(Road r1, Road r2)
+    // their lines actually hit.
+    // The assumption is that if you start at prevRoad and move clockwise around the
+    // intersection, you will reach curRoad in less than 180 degrees. If that were not
+    // the case, this function would give the wrong point.
+    public Point roadsIntersection(Road prevRoad, Road curRoad)
     {
-        // check if r1 and r2 start or end at this intersection
-        boolean r1Start = r1.getStartInt().equals(this);
-        boolean r2Start = r2.getStartInt().equals(this);
+        // check if curRoad and prevRoad start or end at this intersection
+        boolean r1Start = prevRoad.getStartInt().equals(this);
+        boolean r2Start = curRoad.getStartInt().equals(this);
         if(r1Start && r2Start)
         {
-            return this.intersectionPoint(r1Points[0], r1Points[1], r1Points[2], r1Points[3],
-                    r2Points[4], r2Points[5], r2Points[6], r2Points[7]);
+            return this.intersectionPoint(prevRoad.getStartRight(), prevRoad.getEndRight(),
+                    curRoad.getStartLeft(), curRoad.getEndLeft());
         }
         else if(r1Start)
         {
-            return this.intersectionPoint(r1Points[0], r1Points[1], r1Points[2], r1Points[3],
-                    r2Points[0], r2Points[1], r2Points[2], r2Points[3]);
+            return this.intersectionPoint(prevRoad.getStartLeft(), prevRoad.getEndLeft(),
+                    curRoad.getStartLeft(), curRoad.getEndLeft());
         }
         else if(r2Start)
         {
-            return this.intersectionPoint(r1Points[4], r1Points[5], r1Points[6], r1Points[7],
-                    r2Points[4], r2Points[5], r2Points[6], r2Points[7]);
+            return this.intersectionPoint(prevRoad.getStartRight(), prevRoad.getEndRight(),
+                    curRoad.getStartRight(), curRoad.getEndRight());
         }
         else
         {
-            return this.intersectionPoint(r1Points[4], r1Points[5], r1Points[6], r1Points[7],
-                    r2Points[0], r2Points[1], r2Points[2], r2Points[3]);
+            return this.intersectionPoint(prevRoad.getStartLeft(), prevRoad.getEndLeft(),
+                    curRoad.getStartRight(), curRoad.getEndRight());
         }
 
     }
