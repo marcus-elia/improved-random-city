@@ -55,9 +55,7 @@ public class Intersection extends GameObject
     @Override
     public void render(Graphics2D g2d)
     {
-        //g2d.setColor(temporaryColor);
-        //g2d.fill(new Ellipse2D.Double(center.x - 5, center.y - 5, 10, 10));
-        g2d.setColor(temporaryColor);
+        g2d.setColor(Color.GRAY);
 
         // If there is 1 road (or none), just draw a circle for the dead end
         if(roads.size() < 2)
@@ -69,6 +67,17 @@ public class Intersection extends GameObject
         else
         {
             g2d.fill(this.intersectionFill);
+        }
+
+        // Draw a continuation of the center stripe if there are only two roads
+        if(roads.size() == 2)
+        {
+            g2d.setColor(Color.YELLOW);
+            Path2D line = new Path2D.Double();
+            line.moveTo(roads.getFirst().getCenter().x, roads.getFirst().getCenter().y);
+            line.lineTo(center.x, center.y);
+            line.lineTo(roads.getLast().getCenter().x, roads.getLast().getCenter().y);
+            g2d.draw(line);
         }
     }
 
