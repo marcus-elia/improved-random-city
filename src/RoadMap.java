@@ -84,13 +84,13 @@ public class RoadMap extends GameObject
         roadWidth = 10;
         averageRoadLength = 60;
 
-        perpendicularity = 1;
+        perpendicularity = .65;
 
         roadDensityMap = new PerlinNoise(64, 64, 0.2);
 
         intersectionLockOnDistance = 10;
 
-        minIntersectionDistance = 30;
+        minIntersectionDistance = 40;
 
         averageLakeSize = 100;
 
