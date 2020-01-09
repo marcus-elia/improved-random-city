@@ -297,16 +297,22 @@ public class Intersection extends GameObject
 
         // If the two roads are coming straight at each other, just add an endPoint from
         // one of the two roads (the two should approximately coincide)
-        if(Math.abs(angleDifference - Math.PI) < 0.001 || Math.abs(angleDifference + Math.PI) < 0.001)
+        if(Math.abs(angleDifference - Math.PI) < 0.01 || Math.abs(angleDifference + Math.PI) < 0.01)
         {
             // Add the correct corner from the previous road
             if(prevRoad.getStartInt().equals(this))
             {
-                intersectionFillPoints.add(prevRoad.getStartRight());
+                intersectionFillPoints.add(prevRoad.getStartRight().getPointFromHere(
+                        rm.getRoadWidth()/2, prevRoad.getAngle()));
+                intersectionFillPoints.add(prevRoad.getStartRight().getPointFromHere(
+                        rm.getRoadWidth()/2, -prevRoad.getAngle()));
             }
             else
             {
-                intersectionFillPoints.add(prevRoad.getEndLeft());
+                intersectionFillPoints.add(prevRoad.getEndLeft().getPointFromHere(
+                        rm.getRoadWidth()/2, -prevRoad.getAngle()));
+                intersectionFillPoints.add(prevRoad.getEndLeft().getPointFromHere(
+                        rm.getRoadWidth()/2, prevRoad.getAngle()));
             }
         }
         // If the two roads form an angle that is less than 180,
