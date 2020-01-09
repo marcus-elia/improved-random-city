@@ -260,13 +260,13 @@ public class Intersection extends GameObject
         }
         else if(r1Start)
         {
-            return this.intersectionPoint(prevRoad.getStartLeft(), prevRoad.getEndLeft(),
-                    curRoad.getStartLeft(), curRoad.getEndLeft());
+            return this.intersectionPoint(prevRoad.getStartRight(), prevRoad.getEndRight(),
+                    curRoad.getStartRight(), curRoad.getEndRight());
         }
         else if(r2Start)
         {
-            return this.intersectionPoint(prevRoad.getStartRight(), prevRoad.getEndRight(),
-                    curRoad.getStartRight(), curRoad.getEndRight());
+            return this.intersectionPoint(prevRoad.getStartLeft(), prevRoad.getEndLeft(),
+                    curRoad.getStartLeft(), curRoad.getEndLeft());
         }
         else
         {
