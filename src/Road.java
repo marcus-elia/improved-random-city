@@ -202,6 +202,10 @@ public class Road extends GameObject
     {
         return yInt;
     }
+    public double getAngle()
+    {
+        return angle;
+    }
     public double x1()
     {
         return startInt.getCenter().x;
