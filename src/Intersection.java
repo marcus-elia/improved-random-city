@@ -305,12 +305,12 @@ public class Intersection extends GameObject
                 intersectionFillPoints.add(prevRoad.getStartRight().getPointFromHere(
                         rm.getRoadWidth()/2, prevRoad.getAngle()));
                 intersectionFillPoints.add(prevRoad.getStartRight().getPointFromHere(
-                        rm.getRoadWidth()/2, -prevRoad.getAngle()));
+                        -rm.getRoadWidth()/2, prevRoad.getAngle()));
             }
             else
             {
                 intersectionFillPoints.add(prevRoad.getEndLeft().getPointFromHere(
-                        rm.getRoadWidth()/2, -prevRoad.getAngle()));
+                        -rm.getRoadWidth()/2, prevRoad.getAngle()));
                 intersectionFillPoints.add(prevRoad.getEndLeft().getPointFromHere(
                         rm.getRoadWidth()/2, prevRoad.getAngle()));
             }
