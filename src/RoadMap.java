@@ -82,17 +82,17 @@ public class RoadMap extends GameObject
         numAttempts = 5;
 
         roadWidth = 10;
-        averageRoadLength = 60;
+        averageRoadLength = 70;
 
-        perpendicularity = .65;
+        perpendicularity = .70;
 
         roadDensityMap = new PerlinNoise(64, 64, 0.2);
 
-        intersectionLockOnDistance = 10;
+        intersectionLockOnDistance = 15;
 
         minIntersectionDistance = 40;
 
-        averageLakeSize = 100;
+        averageLakeSize = 140;
 
         this.makeFirstIntersection();
     }
@@ -104,7 +104,7 @@ public class RoadMap extends GameObject
         // If it's time to try to build a new road
         if(ticksSinceLastBuild == ticksBetweenBuilds)
         {
-            if(Math.random() > 0.02)
+            if(Math.random() > 0.025)
             {
                 this.buildNewRoad();
             }
