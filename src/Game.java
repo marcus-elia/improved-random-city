@@ -91,7 +91,7 @@ public class Game extends Canvas implements Runnable
             return;
         }
         Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
-
+        g2d.setStroke(new BasicStroke(2));
 
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, WIDTH, HEIGHT);
