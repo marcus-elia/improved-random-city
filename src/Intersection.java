@@ -440,16 +440,23 @@ public class Intersection extends GameObject
             }
 
             // Finally, update the driving points of the last road.
-            double angleDifference = roads.getFirst().getAngleFromIntersection(this)
-                    - roads.getLast().getAngleFromIntersection(this);
-            if((angleDifference >= 0 && angleDifference <= Math.PI) ||
-                    (angleDifference >= -2*Math.PI && angleDifference <= -Math.PI))
+            // It's an exception, so we handle it manually
+            prevRoad = roads.getLast();
+            int arrSize = intersectionFillPoints.size();
+            Point p1 = intersectionPoint(prevRoad.getFS(), prevRoad.getFE(),
+                    intersectionFillPoints.get(0), intersectionFillPoints.get(arrSize-1));
+            Point p2 = intersectionPoint(prevRoad.getBS(), prevRoad.getBE(),
+                    intersectionFillPoints.get(0), intersectionFillPoints.get(arrSize-1));
+
+            if(prevRoad.getStartInt().equals(this))
             {
-                this.updateFBSEPoints(roads.getLast(), true);
+                prevRoad.setFS(p1);
+                prevRoad.setBE(p2);
             }
             else
             {
-                this.updateFBSEPoints(roads.getLast(), false);
+                prevRoad.setBS(p2);
+                prevRoad.setFE(p1);
             }
         }
     }
