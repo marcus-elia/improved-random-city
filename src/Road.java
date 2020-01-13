@@ -46,6 +46,9 @@ public class Road extends GameObject
     // The nth road created is number n;
     private int ID;
 
+    // the forward start/end and backward start/end coordinates the vehicles will use
+    private Point fs, fe, bs, be;
+
     public Road(GameManager inputManager, Point inputCenter, RoadMap inputRM, int inputID,
                 Intersection inputStartInt, Intersection inputEndInt, double inputRoadWidth)
     {
@@ -60,12 +63,14 @@ public class Road extends GameObject
         this.setDrawPoints();
         this.setRectangle();
         this.setCenterStripe();
+        this.initializeDrivePoints();
     }
 
 
 
     @Override
-    public void tick() {
+    public void tick()
+    {
 
     }
 
@@ -173,6 +178,14 @@ public class Road extends GameObject
         centerStripe = new Line2D.Double(startMidPoint.x, startMidPoint.y, endMidPoint.x, endMidPoint.y);
     }
 
+    public void initializeDrivePoints()
+    {
+        fs = Point.midPoint(startRight, startInt.getCenter());
+        fe = Point.midPoint(endRight, endInt.getCenter());
+        bs = Point.midPoint(startLeft, startInt.getCenter());
+        be = Point.midPoint(endLeft, endInt.getCenter());
+    }
+
     // ==========================================
     //
     //                 Getters
@@ -222,6 +235,22 @@ public class Road extends GameObject
     {
         return endInt.getCenter().y;
     }
+    public Point getFS()
+    {
+        return fs;
+    }
+    public Point getFE()
+    {
+        return fe;
+    }
+    public Point getBS()
+    {
+        return bs;
+    }
+    public Point getBE()
+    {
+        return be;
+    }
 
     // Return the actual coordinates where the road is drawn
     /*public double[] getDrawCoordinates()
@@ -247,6 +276,27 @@ public class Road extends GameObject
     }
 
 
+    // ==========================================
+    //
+    //                 Getters
+    //
+    // ==========================================
+    public void setFS(Point input)
+    {
+        fs = input;
+    }
+    public void setFE(Point input)
+    {
+        fe = input;
+    }
+    public void setBS(Point input)
+    {
+        bs = input;
+    }
+    public void setBE(Point input)
+    {
+        be = input;
+    }
 
 
     // ==========================================
