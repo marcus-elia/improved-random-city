@@ -288,7 +288,8 @@ public class Intersection extends GameObject
     // This is a helper function for updateIntersectionFillPoints. Given two consecutive roads
     // going from this intersection (must be that prevRoad is just before curRoad, going clockwise),
     // this adds points to the intersectionFillPoints list as needed (either 1 or 2).
-    public void addPointsToIntersectionFill(Road prevRoad, Road curRoad)
+    // If updateDrivingPoints is true, then it calls updateFBSEPoints() on prevRoad.
+    public void addPointsToIntersectionFill(Road prevRoad, Road curRoad, boolean updateDrivingPoints)
     {
         // Get the angle between the two roads. Note that if curRoad is in quadrant I and prevRoad is
         // in quadrant IV, the difference will be less than negative Pi.
@@ -314,6 +315,11 @@ public class Intersection extends GameObject
                 intersectionFillPoints.add(prevRoad.getEndLeft().getPointFromHere(
                         rm.getRoadWidth()/2, prevRoad.getAngle()));
             }
+
+            if(updateDrivingPoints)
+            {
+                updateFBSEPoints(prevRoad, true);
+            }
         }
         // If the two roads form an angle that is less than 180,
         // just add their intersection point
@@ -321,6 +327,10 @@ public class Intersection extends GameObject
                 (angleDifference > -2*Math.PI && angleDifference < -Math.PI))
         {
             this.intersectionFillPoints.add(this.roadsIntersection(prevRoad, curRoad));
+            if(updateDrivingPoints)
+            {
+                updateFBSEPoints(prevRoad, true);
+            }
         }
         // Otherwise, add both of the roads' endpoints to make sure the polygon is convex
         // (this is a spot where a wedge would be missing if we just drew the roads and
@@ -345,13 +355,18 @@ public class Intersection extends GameObject
             {
                 intersectionFillPoints.add(curRoad.getEndRight());
             }
+
+            if(updateDrivingPoints)
+            {
+                updateFBSEPoints(prevRoad, false);
+            }
         }
     }
 
     // This sets the driving target points for two consecutive roads in the intersection.
     // It essentially finds the intersection between the edge of the intersection fill and
     // the line the vehicles drive on in the Road.
-    public void updateFBSEPoints(Road prevRoad, Road curRoad, boolean lessThan180)
+    public void updateFBSEPoints(Road prevRoad, boolean lessThan180)
     {
         int arrSize = intersectionFillPoints.size();
         if(lessThan180)
@@ -413,7 +428,7 @@ public class Intersection extends GameObject
             prevRoad = roads.getLast();
             curRoad = roads.getFirst();
 
-            this.addPointsToIntersectionFill(prevRoad, curRoad);
+            this.addPointsToIntersectionFill(prevRoad, curRoad, false);
 
             // Now iterate through all the roads
             iter.next();
@@ -421,8 +436,20 @@ public class Intersection extends GameObject
             {
                 prevRoad = curRoad;
                 curRoad = iter.next();
-                this.addPointsToIntersectionFill(prevRoad, curRoad);
+                this.addPointsToIntersectionFill(prevRoad, curRoad, true);
+            }
 
+            // Finally, update the driving points of the last road.
+            double angleDifference = roads.getFirst().getAngleFromIntersection(this)
+                    - roads.getLast().getAngleFromIntersection(this);
+            if((angleDifference >= 0 && angleDifference <= Math.PI) ||
+                    (angleDifference >= -2*Math.PI && angleDifference <= -Math.PI))
+            {
+                this.updateFBSEPoints(roads.getLast(), true);
+            }
+            else
+            {
+                this.updateFBSEPoints(roads.getLast(), false);
             }
         }
     }
