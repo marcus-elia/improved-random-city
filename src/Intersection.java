@@ -348,6 +348,48 @@ public class Intersection extends GameObject
         }
     }
 
+    // This sets the driving target points for two consecutive roads in the intersection.
+    // It essentially finds the intersection between the edge of the intersection fill and
+    // the line the vehicles drive on in the Road.
+    public void updateFBSEPoints(Road prevRoad, Road curRoad, boolean lessThan180)
+    {
+        int arrSize = intersectionFillPoints.size();
+        if(lessThan180)
+        {
+            Point p1 = intersectionPoint(prevRoad.getFS(), prevRoad.getFE(),
+                    intersectionFillPoints.get(arrSize-2), intersectionFillPoints.get(arrSize-1));
+            Point p2 = intersectionPoint(prevRoad.getBS(), prevRoad.getBE(),
+                    intersectionFillPoints.get(arrSize-2), intersectionFillPoints.get(arrSize-1));
+            if(prevRoad.getStartInt().equals(this))
+            {
+                prevRoad.setFS(p1);
+                prevRoad.setBE(p2);
+            }
+            else
+            {
+                prevRoad.setBS(p2);
+                prevRoad.setFE(p1);
+            }
+        }
+        else
+        {
+            Point p1 = intersectionPoint(prevRoad.getFS(), prevRoad.getFE(),
+                    intersectionFillPoints.get(arrSize-2), intersectionFillPoints.get(arrSize-3));
+            Point p2 = intersectionPoint(prevRoad.getBS(), prevRoad.getBE(),
+                    intersectionFillPoints.get(arrSize-2), intersectionFillPoints.get(arrSize-3));
+            if(prevRoad.getStartInt().equals(this))
+            {
+                prevRoad.setFS(p1);
+                prevRoad.setBE(p2);
+            }
+            else
+            {
+                prevRoad.setBS(p2);
+                prevRoad.setFE(p1);
+            }
+        }
+    }
+
     // This function sets the lists of intersection fill points. This should be called each time a
     // new road is added to the intersection, so the polygon filled in by the intersection will
     // fill in any new gaps that are created.
@@ -380,6 +422,7 @@ public class Intersection extends GameObject
                 prevRoad = curRoad;
                 curRoad = iter.next();
                 this.addPointsToIntersectionFill(prevRoad, curRoad);
+
             }
         }
     }
