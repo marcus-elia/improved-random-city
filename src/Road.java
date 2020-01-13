@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.Optional;
@@ -81,6 +82,7 @@ public class Road extends GameObject
         g2d.fill(rectangle);
         g2d.setColor(Color.YELLOW);
         g2d.draw(centerStripe);
+        drawDrivingPoints(g2d);
     }
 
     // ==========================================
@@ -459,6 +461,10 @@ public class Road extends GameObject
         endRight.y -= amount;
         startLeft.y -= amount;
         endLeft.y -= amount;
+        fs.y -= amount;
+        fe.y -= amount;
+        bs.y -= amount;
+        be.y -= amount;
         if(yInt.isPresent())
         {
             yInt = Optional.of(yInt.get() - amount);
@@ -475,6 +481,10 @@ public class Road extends GameObject
         endRight.y += amount;
         startLeft.y += amount;
         endLeft.y += amount;
+        fs.y += amount;
+        fe.y += amount;
+        bs.y += amount;
+        be.y += amount;
         if(yInt.isPresent())
         {
             yInt = Optional.of(yInt.get() + amount);
@@ -491,6 +501,10 @@ public class Road extends GameObject
         endRight.x -= amount;
         startLeft.x -= amount;
         endLeft.x -= amount;
+        fs.x -= amount;
+        fe.x -= amount;
+        bs.x -= amount;
+        be.x -= amount;
         if(yInt.isPresent())
         {
             yInt = Optional.of(yInt.get() + amount * slope.get());
@@ -507,6 +521,10 @@ public class Road extends GameObject
         endRight.x += amount;
         startLeft.x += amount;
         endLeft.x += amount;
+        fs.x += amount;
+        fe.x += amount;
+        bs.x += amount;
+        be.x += amount;
         if(yInt.isPresent())
         {
             yInt = Optional.of(yInt.get() - amount * slope.get());
@@ -531,5 +549,19 @@ public class Road extends GameObject
         }
         System.out.println("\tStart: " + getStartPoint().x + ", " + getStartPoint().y);
         System.out.println("\tEnd: " + getEndPoint().x + ", " + getEndPoint().y);
+    }
+
+    public void drawDrivingPoints(Graphics2D g2d)
+    {
+        g2d.setColor(Color.magenta);
+        Shape dot;
+        dot = new Ellipse2D.Double(fs.x - 3, fs.y - 3, 6, 6);
+        g2d.fill(dot);
+        dot = new Ellipse2D.Double(fe.x - 3, fe.y - 3, 6, 6);
+        g2d.fill(dot);
+        dot = new Ellipse2D.Double(bs.x - 3, bs.y - 3, 6, 6);
+        g2d.fill(dot);
+        dot = new Ellipse2D.Double(be.x - 3, be.y - 3, 6, 6);
+        g2d.fill(dot);
     }
 }
