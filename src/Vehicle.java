@@ -66,7 +66,49 @@ public class Vehicle extends GameObject
     @Override
     public void tick()
     {
+        // First, handle the case of being stuck on a dead end Road
+        if(isStuck)
+        {
+            stuckTime++;
+            // If a new Road has been built for us to drive on to, the Vehicle
+            // is now unstuck
+            if(!this.checkStuck())
+            {
+                isStuck = false;
+                stuckTime = 0;
+                updateTarget();
+                updateAngleAndSpeed();
+            }
+        }
+        // Next, handle the case of being stopped at an Intersection
+        else if(isStopped)
+        {
+            stoppedTime++;
+            if(stoppedTime == 50)
+            {
+                isStopped = false;
+                stoppedTime = 0;
+            }
+        }
+        // Otherwise, drive.
+        else
+        {
+            // If we are one frame away from the target or less, move to it.
+            if(center.distanceToPoint(target) < curSpeed)
+            {
+                this.moveX(target.x - center.x);
+                this.moveY(target.y - center.y);
 
+                isOnRoad = !isOnRoad;
+                this.updateTarget();
+            }
+            // Otherwise, keep going toward it
+            else
+            {
+                this.moveX(vx);
+                this.moveY(vy);
+            }
+        }
     }
 
     @Override
@@ -177,5 +219,62 @@ public class Vehicle extends GameObject
         hitbox = rotateTransform.createTransformedShape(hitbox);
         angle = newAngle;
         this.updateVelocityComponents();
+    }
+
+    // Move the Vehicle in the x-axis, but keep the target in place
+    public void moveX(double amount)
+    {
+        center.x += amount;
+        AffineTransform move = new AffineTransform();
+        move.translate(amount, 0);
+        hitbox = move.createTransformedShape(hitbox);
+    }
+    // Move the Vehicle in the y-axis, but keep the target in place
+    public void moveY(double amount)
+    {
+        center.y += amount;
+        AffineTransform move = new AffineTransform();
+        move.translate(0, amount);
+        hitbox = move.createTransformedShape(hitbox);
+    }
+
+
+    // ==========================================
+    //
+    //            Scrolling Functions
+    //
+    // ==========================================
+    // Everything, including the target, moves when scrolling
+    public void moveUp(double amount)
+    {
+        center.y -= amount;
+        target.y -= amount;
+        AffineTransform move = new AffineTransform();
+        move.translate(0, -amount);
+        hitbox = move.createTransformedShape(hitbox);
+    }
+    public void moveDown(double amount)
+    {
+        center.y += amount;
+        target.y += amount;
+        AffineTransform move = new AffineTransform();
+        move.translate(0, amount);
+        hitbox = move.createTransformedShape(hitbox);
+    }
+    public void moveLeft(double amount)
+    {
+        center.x -= amount;
+        target.x -= amount;
+        AffineTransform move = new AffineTransform();
+        move.translate(-amount, 0);
+        hitbox = move.createTransformedShape(hitbox);
+    }
+    public void moveRight(double amount)
+    {
+        center.x += amount;
+        target.x += amount;
+        AffineTransform move = new AffineTransform();
+        move.translate(amount, 0);
+        hitbox = move.createTransformedShape(hitbox);
     }
 }
