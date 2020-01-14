@@ -162,6 +162,29 @@ public class Intersection extends GameObject
     }
 
 
+    // ==========================================
+    //
+    //            Vehicle Navigation
+    //
+    // ==========================================
+
+    // Returns a random road that is not the given Road, unless it is the only one
+    public Road getRandomRoadExcept(Road r)
+    {
+        if(roads.size() == 1)
+        {
+            return roads.get(0);
+        }
+        int rand = (int) Math.floor(Math.random() * roads.size());
+        Road curRoad = roads.get(rand);
+        while(curRoad.equals(r))
+        {
+            rand = (int) Math.floor(Math.random() * roads.size());
+            curRoad = roads.get(rand);
+        }
+        return curRoad;
+    }
+
 
 
 
@@ -482,291 +505,7 @@ public class Intersection extends GameObject
 
 
 
-    // update the points that are used in the Path2D object that fills in the intersection
-    /*public void updateIntersectionFillPointsOLD()
-    {
-        // if we have more than one road, calculate things based upon that
-        if(roads.size() > 1)
-        {
-            ListIterator<Road> iter = (ListIterator)roads.iterator();
 
-            // for calculating intersection points between roads and the intersection fill
-            double x1, y1, x2, y2, x3, y3, x4, y4;
-
-            int arrSize;
-            double[] point;
-
-            this.intersectionFillXPoints = new ArrayList<Double>();
-            this.intersectionFillYPoints = new ArrayList<Double>();
-
-            // start at the last and first road in the linked list
-            Road prevRoad = roads.getLast();
-            double[] prevRoadPoints = prevRoad.getDrawCoordinates();
-            Road curRoad = roads.getFirst();
-            double[] curRoadPoints = curRoad.getDrawCoordinates();
-            double angleDifference = curRoad.getAngleFromIntersection(this) - prevRoad.getAngleFromIntersection(this);
-
-            // if the two roads form an angle that is less than 180,
-            // just draw to their intersection point
-            if((angleDifference > 0 && angleDifference < Math.PI) ||
-                    (angleDifference > -2*Math.PI && angleDifference < -Math.PI))
-            {
-                double[] drawPoint = this.roadsIntersection(prevRoad, curRoad);
-                intersectionFillXPoints.add(drawPoint[0]);
-                intersectionFillYPoints.add(drawPoint[1]);
-            }
-            // otherwise, connect to both of the roads' endpoints
-            else
-            {
-                // if the current road starts at this intersection
-                if(curRoad.getStartInt().equals(this))
-                {
-                    if(prevRoad.getStartInt().equals(this))
-                    {
-                        intersectionFillXPoints.add(prevRoadPoints[0]);
-                        intersectionFillYPoints.add(prevRoadPoints[1]);
-                    }
-                    else
-                    {
-                        intersectionFillXPoints.add(prevRoadPoints[6]);
-                        intersectionFillYPoints.add(prevRoadPoints[7]);
-                    }
-                    intersectionFillXPoints.add(curRoadPoints[4]);
-                    intersectionFillYPoints.add(curRoadPoints[5]);
-                }
-                // if the current road ends at this intersection
-                else
-                {
-                    if(prevRoad.getStartInt().equals(this))
-                    {
-                        intersectionFillXPoints.add(prevRoadPoints[0]);
-                        intersectionFillYPoints.add(prevRoadPoints[1]);
-                    }
-                    else
-                    {
-                        intersectionFillXPoints.add(prevRoadPoints[6]);
-                        intersectionFillYPoints.add(prevRoadPoints[7]);
-                    }
-                    intersectionFillXPoints.add(curRoadPoints[2]);
-                    intersectionFillYPoints.add(curRoadPoints[3]);
-                }
-            }
-
-            // now iterate through all the roads
-            iter.next();
-            while(iter.hasNext())
-            {
-                prevRoad = curRoad;
-                prevRoadPoints = curRoadPoints;
-                curRoad = iter.next();
-                curRoadPoints = curRoad.getDrawCoordinates();
-                angleDifference = curRoad.getAngleFromIntersection(this) - prevRoad.getAngleFromIntersection(this);
-
-                // if the two roads form an angle that is less than 180, just draw their intersection point
-                if((angleDifference > 0 && angleDifference < Math.PI) ||
-                        (angleDifference > -2*Math.PI && angleDifference < -Math.PI))
-                {
-                    double[] drawPoint = this.roadsIntersection(prevRoad, curRoad);
-                    intersectionFillXPoints.add(drawPoint[0]);
-                    intersectionFillYPoints.add(drawPoint[1]);
-                    //intersectionFill.lineTo(drawPoint[0], drawPoint[1]);
-                    arrSize = intersectionFillXPoints.size();
-
-                    if(prevRoad.getStartInt().equals(this))
-                    {
-                        x1 = prevRoad.getForwardStartCoordinates()[0];
-                        y1 = prevRoad.getForwardStartCoordinates()[1];
-                        x2 = prevRoad.getForwardEndCoordinates()[0];
-                        y2 = prevRoad.getForwardEndCoordinates()[1];
-                        x3 = intersectionFillXPoints.get(arrSize-2);
-                        y3 = intersectionFillYPoints.get(arrSize-2);
-                        x4 = intersectionFillXPoints.get(arrSize-1);
-                        y4 = intersectionFillYPoints.get(arrSize-1);
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setFS(point[0], point[1]);
-
-                        x1 = prevRoad.getBackwardStartCoordinates()[0];
-                        y1 = prevRoad.getBackwardStartCoordinates()[1];
-                        x2 = prevRoad.getBackwardEndCoordinates()[0];
-                        y2 = prevRoad.getBackwardEndCoordinates()[1];
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setBE(point[0], point[1]);
-                    }
-                    else
-                    {
-                        x1 = prevRoad.getBackwardStartCoordinates()[0];
-                        y1 = prevRoad.getBackwardStartCoordinates()[1];
-                        x2 = prevRoad.getBackwardEndCoordinates()[0];
-                        y2 = prevRoad.getBackwardEndCoordinates()[1];
-                        x3 = intersectionFillXPoints.get(arrSize-2);
-                        y3 = intersectionFillYPoints.get(arrSize-2);
-                        x4 = intersectionFillXPoints.get(arrSize-1);
-                        y4 = intersectionFillYPoints.get(arrSize-1);
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setBS(point[0], point[1]);
-
-                        x1 = prevRoad.getForwardStartCoordinates()[0];
-                        y1 = prevRoad.getForwardStartCoordinates()[1];
-                        x2 = prevRoad.getForwardEndCoordinates()[0];
-                        y2 = prevRoad.getForwardEndCoordinates()[1];
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setFE(point[0], point[1]);
-                    }
-                }
-                // otherwise, connect to both of the roads endpoints
-                else
-                {
-                    if(curRoad.getStartInt().equals(this))
-                    {
-                        if(prevRoad.getStartInt().equals(this))
-                        {
-                            intersectionFillXPoints.add(prevRoadPoints[0]);
-                            intersectionFillYPoints.add(prevRoadPoints[1]);
-                        }
-                        else
-                        {
-                            intersectionFillXPoints.add(prevRoadPoints[6]);
-                            intersectionFillYPoints.add(prevRoadPoints[7]);
-                        }
-                        intersectionFillXPoints.add(curRoadPoints[4]);
-                        intersectionFillYPoints.add(curRoadPoints[5]);
-
-
-                    }
-                    else
-                    {
-                        if(prevRoad.getStartInt().equals(this))
-                        {
-                            intersectionFillXPoints.add(prevRoadPoints[0]);
-                            intersectionFillYPoints.add(prevRoadPoints[1]);
-                        }
-                        else
-                        {
-                            intersectionFillXPoints.add(prevRoadPoints[6]);
-                            intersectionFillYPoints.add(prevRoadPoints[7]);
-                        }
-                        intersectionFillXPoints.add(curRoadPoints[2]);
-                        intersectionFillYPoints.add(curRoadPoints[3]);
-                    }
-                    arrSize = intersectionFillXPoints.size();
-
-                    if(prevRoad.getStartInt().equals(this))
-                    {
-                        x1 = prevRoad.getForwardStartCoordinates()[0];
-                        y1 = prevRoad.getForwardStartCoordinates()[1];
-                        x2 = prevRoad.getForwardEndCoordinates()[0];
-                        y2 = prevRoad.getForwardEndCoordinates()[1];
-                        x3 = intersectionFillXPoints.get(arrSize-2);
-                        y3 = intersectionFillYPoints.get(arrSize-2);
-                        x4 = intersectionFillXPoints.get(arrSize-3);
-                        y4 = intersectionFillYPoints.get(arrSize-3);
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setFS(point[0], point[1]);
-
-                        x1 = prevRoad.getBackwardStartCoordinates()[0];
-                        y1 = prevRoad.getBackwardStartCoordinates()[1];
-                        x2 = prevRoad.getBackwardEndCoordinates()[0];
-                        y2 = prevRoad.getBackwardEndCoordinates()[1];
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setBE(point[0], point[1]);
-                    }
-                    else
-                    {
-                        x1 = prevRoad.getBackwardStartCoordinates()[0];
-                        y1 = prevRoad.getBackwardStartCoordinates()[1];
-                        x2 = prevRoad.getBackwardEndCoordinates()[0];
-                        y2 = prevRoad.getBackwardEndCoordinates()[1];
-                        x3 = intersectionFillXPoints.get(arrSize-2);
-                        y3 = intersectionFillYPoints.get(arrSize-2);
-                        x4 = intersectionFillXPoints.get(arrSize-3);
-                        y4 = intersectionFillYPoints.get(arrSize-3);
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setBS(point[0], point[1]);
-
-                        x1 = prevRoad.getForwardStartCoordinates()[0];
-                        y1 = prevRoad.getForwardStartCoordinates()[1];
-                        x2 = prevRoad.getForwardEndCoordinates()[0];
-                        y2 = prevRoad.getForwardEndCoordinates()[1];
-
-                        point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                        prevRoad.setFE(point[0], point[1]);
-                    }
-                }
-            }
-            arrSize = intersectionFillXPoints.size();
-            prevRoad = roadsLL.getLast();
-            if(prevRoad.getStartInt().equals(this))
-            {
-                x1 = prevRoad.getForwardStartCoordinates()[0];
-                y1 = prevRoad.getForwardStartCoordinates()[1];
-                x2 = prevRoad.getForwardEndCoordinates()[0];
-                y2 = prevRoad.getForwardEndCoordinates()[1];
-                x3 = intersectionFillXPoints.get(0);
-                y3 = intersectionFillYPoints.get(0);
-                x4 = intersectionFillXPoints.get(arrSize-1);
-                y4 = intersectionFillYPoints.get(arrSize-1);
-
-                point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                prevRoad.setFS(point[0], point[1]);
-
-                x1 = prevRoad.getBackwardStartCoordinates()[0];
-                y1 = prevRoad.getBackwardStartCoordinates()[1];
-                x2 = prevRoad.getBackwardEndCoordinates()[0];
-                y2 = prevRoad.getBackwardEndCoordinates()[1];
-
-                point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                prevRoad.setBE(point[0], point[1]);
-            }
-            else
-            {
-                x1 = prevRoad.getBackwardStartCoordinates()[0];
-                y1 = prevRoad.getBackwardStartCoordinates()[1];
-                x2 = prevRoad.getBackwardEndCoordinates()[0];
-                y2 = prevRoad.getBackwardEndCoordinates()[1];
-                x3 = intersectionFillXPoints.get(0);
-                y3 = intersectionFillYPoints.get(0);
-                x4 = intersectionFillXPoints.get(arrSize-1);
-                y4 = intersectionFillYPoints.get(arrSize-1);
-
-                point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                prevRoad.setBS(point[0], point[1]);
-
-                x1 = prevRoad.getForwardStartCoordinates()[0];
-                y1 = prevRoad.getForwardStartCoordinates()[1];
-                x2 = prevRoad.getForwardEndCoordinates()[0];
-                y2 = prevRoad.getForwardEndCoordinates()[1];
-
-                point = this.intersectionPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-                prevRoad.setFE(point[0], point[1]);
-            }
-        }
-        else if(numRoads > 0)
-        {
-            Road r = roadsLL.getFirst();
-            double point[];
-            if(r.getStartInt().equals(this))
-            {
-                point = r.getForwardStartCoordinates();
-                r.setFS(point[0], point[1]);
-                point = r.getBackwardEndCoordinates();
-                r.setBE(point[0], point[1]);
-            }
-            else
-            {
-                point = r.getForwardEndCoordinates();
-                r.setFE(point[0], point[1]);
-                point = r.getBackwardStartCoordinates();
-                r.setBS(point[0], point[1]);
-            }
-        }
-    }*/
 
 
     // ==========================================
