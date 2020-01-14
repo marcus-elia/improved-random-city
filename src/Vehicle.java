@@ -59,6 +59,7 @@ public class Vehicle extends GameObject
         this.updateNextIntersection();
         aggression = inputAggression;
         this.updateTarget();
+        this.updateAngleAndSpeed();
 
     }
 
@@ -159,5 +160,22 @@ public class Vehicle extends GameObject
                 else target = nextRoad.getBS();
             }
         }
+    }
+
+    public void updateVelocityComponents()
+    {
+        vx = curSpeed*Math.cos(angle);
+        vy = curSpeed*Math.sin(angle);
+    }
+
+    // Whenever the target Point is changed, we have to update the angle and speed fields
+    // so that the Vehicle moves toward the target
+    public void updateAngleAndSpeed()
+    {
+        double newAngle = center.angleToOtherPoint(target);
+        rotateTransform.rotate(newAngle - angle);
+        hitbox = rotateTransform.createTransformedShape(hitbox);
+        angle = newAngle;
+        this.updateVelocityComponents();
     }
 }
