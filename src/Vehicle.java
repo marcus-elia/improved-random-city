@@ -24,6 +24,8 @@ public class Vehicle extends GameObject
     private double curSpeed;
     private double maxSpeed;
     private double acceleration;
+    private double vx, vy;       // x and y components of the current velocity
+    private Point target;
 
     // ==========================================
     //
@@ -52,8 +54,11 @@ public class Vehicle extends GameObject
         color = inputColor;
 
         curRoad = inputCurRoad;
+        isGoingForward = true;
+        isOnRoad = true;
+        this.updateNextIntersection();
         aggression = inputAggression;
-
+        this.updateTarget();
 
     }
 
@@ -80,5 +85,79 @@ public class Vehicle extends GameObject
         hitbox = new Rectangle2D.Double(center.x - xWidth/2, center.y - yWidth/2, xWidth, yWidth);
         rotateTransform.rotate(angle);
         hitbox = rotateTransform.createTransformedShape(hitbox);
+    }
+
+
+
+
+    // ==========================================
+    //
+    //          Movement and Behavior
+    //
+    // ==========================================
+    // The nextInt is set to be either the start or end int of the current road,
+    // depending on which way the Vehicle is going
+    public void updateNextIntersection()
+    {
+        if(this.isGoingForward)
+        {
+            this.nextInt = this.curRoad.getEndInt();
+        }
+        else
+        {
+            this.nextInt = this.curRoad.getStartInt();
+        }
+    }
+
+    // Return true if we are going down a dead end road
+    public boolean checkStuck()
+    {
+        return nextInt.getRoads().size() == 1;
+    }
+
+    // If the Vehicle is on a dead end road, target halfway along the Road
+    public void updateTargetStuck()
+    {
+        if(isGoingForward)
+        {
+            target = Point.midPoint(curRoad.getFS(), curRoad.getFE());
+        }
+        else
+        {
+            target = Point.midPoint(curRoad.getBS(), curRoad.getBE());
+        }
+    }
+
+
+    public void updateTarget()
+    {
+        if(this.checkStuck())
+        {
+            this.updateTargetStuck();
+        }
+        else
+        {
+            // If we are on a Road, target the end of the Road
+            if(this.isOnRoad)
+            {
+                if(this.isGoingForward)
+                {
+                    target = curRoad.getFE();
+                }
+                else
+                {
+                    target = curRoad.getBE();
+                }
+            }
+            // If we are in an Intersection, target the start of the next Road
+            else
+            {
+                if(nextRoad.getStartInt().equals(nextInt))
+                {
+                    target = nextRoad.getFS();
+                }
+                else target = nextRoad.getBS();
+            }
+        }
     }
 }
