@@ -78,4 +78,11 @@ public class Point
     {
         return new Point((p1.x + p2.x)/2, (p1.y + p2.y)/2);
     }
+
+    // Returns a new Point object with the same coordinates as this one
+    public Point copy()
+    {
+        return new Point(x, y);
+    }
+
 }
