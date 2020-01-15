@@ -563,5 +563,15 @@ public class Road extends GameObject
         g2d.fill(dot);
         dot = new Ellipse2D.Double(be.x - 3, be.y - 3, 6, 6);
         g2d.fill(dot);
+
+        g2d.setColor(Color.black);
+        Point mpf = Point.midPoint(fs, fe);
+        dot = new Ellipse2D.Double(mpf.x - 3, mpf.y - 3, 6, 6);
+        g2d.fill(dot);
+
+        g2d.setColor(Color.white);
+        Point mpb = Point.midPoint(bs, be);
+        dot = new Ellipse2D.Double(mpb.x - 3, mpb.y - 3, 6, 6);
+        g2d.fill(dot);
     }
 }
