@@ -42,6 +42,7 @@ public class Vehicle extends GameObject
     private int stuckTime;
     private boolean isStopped;      // are we stopped before entering an intersection?
     private int stoppedTime;
+    private int normalStopTime;     // how long we stop at an intersection
 
 
     public Vehicle(GameManager inputManager, Point inputCenter, double inputXWidth, double inputYWidth, Color inputColor,
@@ -59,6 +60,7 @@ public class Vehicle extends GameObject
         isOnRoad = true;
         this.updateNextIntersection();
         aggression = inputAggression;
+        normalStopTime = (int)(aggression * 100);
         curSpeed = 0.5;
         this.initializeTarget();
         this.updateAngleAndSpeed();
@@ -89,7 +91,7 @@ public class Vehicle extends GameObject
             {
                 stoppedTime++;
                 // If we have waited long enough, start going
-                if(stoppedTime == 50)
+                if(stoppedTime == normalStopTime)
                 {
                     isStopped = false;
                     stoppedTime = 0;
@@ -102,6 +104,11 @@ public class Vehicle extends GameObject
             else if(isOnRoad)
             {
                 isStopped = true;
+                // If the intersection only has two roads, don't stop at all
+                if(nextInt.getRoads().size() == 2)
+                {
+                    stoppedTime = normalStopTime - 1;
+                }
             }
             // The last case is that we are at the start of the new Road
             else
@@ -133,19 +140,7 @@ public class Vehicle extends GameObject
     @Override
     public void render(Graphics2D g2d)
     {
-        if(isStuck)
-        {
-            g2d.setColor(Color.white);
-        }
-        else if(isOnRoad)
-        {
-            g2d.setColor(Color.green);
-        }
-        else
-        {
-
-            g2d.setColor(color);
-        }
+        g2d.setColor(color);
         g2d.fill(hitbox);
     }
 
