@@ -60,8 +60,8 @@ public class Vehicle extends GameObject
         this.updateNextIntersection();
         aggression = inputAggression;
         curSpeed = 0.5;
-        this.updateTarget();
-
+        this.initializeTarget();
+        this.updateAngleAndSpeed();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Vehicle extends GameObject
         // First, check if we are at the target
         if(center.distanceToPoint(target) < 0.001)
         {
-            // Handle the case of being stuck on a dead end Road
+            // Handle the case of being halfway down a dead end Road
             if(isStuck)
             {
                 stuckTime++;
@@ -80,7 +80,7 @@ public class Vehicle extends GameObject
                 {
                     isStuck = false;
                     stuckTime = 0;
-                    updateTarget();
+                    updateTargetOnRoad(); // Now target the end of the Road
                 }
             }
             // Next, handle the case of being stopped at an Intersection
@@ -93,17 +93,22 @@ public class Vehicle extends GameObject
                     isStopped = false;
                     stoppedTime = 0;
                     isOnRoad = false;
-                    updateTarget();
+                    this.updateTargetThroughIntersection();
+                    this.updateAngleAndSpeed();
                 }
+            }
+            // If we have just arrived at an Intersection
+            else if(isOnRoad)
+            {
+                isStopped = true;
             }
             // The last case is that we are at the start of the new Road
             else
             {
                 isOnRoad = true;
-                curRoad = nextRoad;
-                updateTarget(); // updates nextRoad and nextInt
+                this.enterNewRoad();
+                this.updateAngleAndSpeed();
             }
-
         }
 
         // Otherwise, drive.
@@ -114,9 +119,6 @@ public class Vehicle extends GameObject
             {
                 this.moveX(target.x - center.x);
                 this.moveY(target.y - center.y);
-
-                //isOnRoad = !isOnRoad;
-                //this.updateTarget();
             }
             // Otherwise, keep going toward it
             else
@@ -130,7 +132,19 @@ public class Vehicle extends GameObject
     @Override
     public void render(Graphics2D g2d)
     {
-        g2d.setColor(color);
+        if(isStuck)
+        {
+            g2d.setColor(Color.white);
+        }
+        else if(isOnRoad)
+        {
+            g2d.setColor(Color.green);
+        }
+        else
+        {
+
+            g2d.setColor(color);
+        }
         g2d.fill(hitbox);
 
         g2d.setColor(Color.blue);
@@ -154,7 +168,19 @@ public class Vehicle extends GameObject
     }
 
 
-
+    public void initializeTarget()
+    {
+        if(this.checkStuck())
+        {
+            isStuck = true;
+            this.updateTargetStuck();
+        }
+        else
+        {
+            this.updateNextIntersection();
+            this.updateTargetOnRoad();
+        }
+    }
 
     // ==========================================
     //
@@ -184,6 +210,7 @@ public class Vehicle extends GameObject
     // If the Vehicle is on a dead end road, target halfway along the Road
     public void updateTargetStuck()
     {
+        isStuck = true;
         if(isGoingForward)
         {
             target = Point.midPoint(curRoad.getFS(), curRoad.getFE());
@@ -201,44 +228,45 @@ public class Vehicle extends GameObject
         if(this.isGoingForward)
         {
             target = curRoad.getFE();
-            nextInt = curRoad.getEndInt();
         }
         else
         {
             target = curRoad.getBE();
-            nextInt = curRoad.getStartInt();
         }
         nextRoad = nextInt.getRandomRoadExcept(curRoad);
     }
 
-
-    public void updateTarget()
+    // When the Vehicle leaves an Intersection and starts driving on a new Road, this sets
+    // the target and curRoad and nextInt (and nextRoad if applicable) based on whether
+    // the new Road is a dead end or not.
+    public void enterNewRoad()
     {
+        curRoad = nextRoad;
+        this.isGoingForward = curRoad.getStartInt().equals(nextInt);
+        this.updateNextIntersection();
         if(this.checkStuck())
         {
+            isStuck = true;
             this.updateTargetStuck();
         }
         else
         {
-            // If we are on a Road, target the end of the Road
-            if(this.isOnRoad)
-            {
-                this.updateTargetOnRoad();
-            }
-            // If we are in an Intersection, target the start of the next Road
-            else
-            {
-                if(nextRoad.getStartInt().equals(nextInt))
-                {
-                    target = nextRoad.getFS();
-                }
-                else
-                {
-                    target = nextRoad.getBS();
-                }
-            }
+            this.updateTargetOnRoad();
         }
-        updateAngleAndSpeed();
+    }
+
+    // When the Vehicle has just arrived at the beginning of an Intersection,
+    // target the start of the next Road through the Intersection.
+    public void updateTargetThroughIntersection()
+    {
+         if(nextRoad.getStartInt().equals(nextInt))
+         {
+             target = nextRoad.getFS();
+         }
+         else
+         {
+             target = nextRoad.getBS();
+         }
     }
 
     public void updateVelocityComponents()
