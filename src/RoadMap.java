@@ -52,6 +52,9 @@ public class RoadMap extends GameObject
     // The average size of the lakes' longer radius (lake is ellipse)
     private int averageLakeSize;
 
+    // Controls the density of Vehicles
+    private double carsPerRoad;
+
     // ==========================================
     //
     //             City Properties
@@ -94,6 +97,8 @@ public class RoadMap extends GameObject
 
         averageLakeSize = 140;
 
+        carsPerRoad = 0.1;
+
         this.makeFirstIntersection();
     }
 
@@ -113,6 +118,12 @@ public class RoadMap extends GameObject
                 this.buildNewLake();
             }
             ticksSinceLastBuild = 0;
+        }
+
+        // if we don't have too many vehicles, make a new one
+        if(vehicles.size() < roads.size()*this.carsPerRoad)// && vehicles.size() < 1)
+        {
+            this.createNewVehicle();
         }
 
         for(Lake l : lakes)
@@ -520,6 +531,20 @@ public class RoadMap extends GameObject
                 return;
             }
         }
+    }
+
+    // Returns a random road from the list. Used for putting new vehicles in the map.
+    public Road getRandomRoad()
+    {
+        return roads.get((int)(Math.random()*roads.size()));
+    }
+
+
+    public void createNewVehicle()
+    {
+        Road r = this.getRandomRoad();
+        Vehicle v = new Vehicle(manager, r.getFS(), 10, 5, Color.red, r, 0.5);
+        this.addVehicle(v);
     }
 
     // Iterates through all pairs of roads to see if any intersections happen.
