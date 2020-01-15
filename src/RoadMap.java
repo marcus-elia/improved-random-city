@@ -121,7 +121,7 @@ public class RoadMap extends GameObject
         }
 
         // if we don't have too many vehicles, make a new one
-        if(vehicles.size() < roads.size()*this.carsPerRoad)// && vehicles.size() < 1)
+        if(vehicles.size() < (roads.size()-3)*this.carsPerRoad)
         {
             this.createNewVehicle();
         }
@@ -543,7 +543,8 @@ public class RoadMap extends GameObject
     public void createNewVehicle()
     {
         Road r = this.getRandomRoad();
-        Vehicle v = new Vehicle(manager, r.getFS(), 10, 5, Color.red, r, 0.5);
+        Point spawnPoint = Point.midPoint(Point.midPoint(r.getFS(), r.getFE()), r.getFS());
+        Vehicle v = new Vehicle(manager, spawnPoint, 16, 8, Color.red, r, 0.5);
         this.addVehicle(v);
     }
 
