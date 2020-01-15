@@ -86,29 +86,13 @@ public class Vehicle extends GameObject
                     updateAngleAndSpeed();
                 }
             }
-            // Next, handle the case of being stopped at an Intersection
-            else if(isStopped)
-            {
-                stoppedTime++;
-                // If we have waited long enough, start going
-                if(stoppedTime == normalStopTime)
-                {
-                    isStopped = false;
-                    stoppedTime = 0;
-                    isOnRoad = false;
-                    this.updateTargetThroughIntersection();
-                    this.updateAngleAndSpeed();
-                }
-            }
-            // If we have just arrived at an Intersection
+            // If we have just gotten to the end of the Road, which is the start of the
+            // new Intersection
             else if(isOnRoad)
             {
-                isStopped = true;
-                // If the intersection only has two roads, don't stop at all
-                if(nextInt.getRoads().size() == 2)
-                {
-                    stoppedTime = normalStopTime - 1;
-                }
+                isOnRoad = false;
+                this.updateTargetThroughIntersection();
+                this.updateAngleAndSpeed();
             }
             // The last case is that we are at the start of the new Road
             else
@@ -118,7 +102,32 @@ public class Vehicle extends GameObject
                 this.updateAngleAndSpeed();
             }
         }
-
+        // If we have just arrived to a Car's length from the intersection
+        // and need to potentially stop.  Make sure the Car is not stopped already and
+        // not on a dead end.
+        else if(isOnRoad && !isStuck && !isStopped && center.distanceToPoint(target) < xWidth/2 + curSpeed &&
+                center.distanceToPoint(target) > xWidth/2)
+        {
+            isStopped = true;
+            // If the intersection only has two roads, don't stop at all
+            if(nextInt.getRoads().size() == 2)
+            {
+                stoppedTime = normalStopTime - 1;
+            }
+        }
+        // Next, handle the case of being stopped at an Intersection
+        else if(isStopped)
+        {
+            stoppedTime++;
+            // If we have waited long enough, start going
+            if(stoppedTime == normalStopTime)
+            {
+                isStopped = false;
+                stoppedTime = 0;
+                this.moveX(vx);
+                this.moveY(vy);
+            }
+        }
         // Otherwise, drive.
         else
         {
