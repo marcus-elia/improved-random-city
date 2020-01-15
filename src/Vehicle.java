@@ -81,6 +81,7 @@ public class Vehicle extends GameObject
                     isStuck = false;
                     stuckTime = 0;
                     updateTargetOnRoad(); // Now target the end of the Road
+                    updateAngleAndSpeed();
                 }
             }
             // Next, handle the case of being stopped at an Intersection
@@ -152,6 +153,15 @@ public class Vehicle extends GameObject
         g2d.fill(dot);
         g2d.setColor(Color.green);
         dot = new Ellipse2D.Double(nextInt.getCenter().x-4, nextInt.getCenter().y-4, 8, 8);
+        g2d.fill(dot);
+        if(nextRoad != null)
+        {
+            g2d.setColor(Color.orange);
+            dot = new Ellipse2D.Double(nextRoad.getCenter().x-4, nextRoad.getCenter().y-4, 8, 8);
+            g2d.fill(dot);
+        }
+        g2d.setColor(Color.CYAN);
+        dot = new Ellipse2D.Double(target.x-4, target.y-4, 8, 8);
         g2d.fill(dot);
     }
 
@@ -227,11 +237,11 @@ public class Vehicle extends GameObject
     {
         if(this.isGoingForward)
         {
-            target = curRoad.getFE();
+            target = curRoad.getFE().copy();
         }
         else
         {
-            target = curRoad.getBE();
+            target = curRoad.getBE().copy();
         }
         nextRoad = nextInt.getRandomRoadExcept(curRoad);
     }
@@ -247,6 +257,7 @@ public class Vehicle extends GameObject
         if(this.checkStuck())
         {
             isStuck = true;
+            nextRoad = null;
             this.updateTargetStuck();
         }
         else
@@ -261,11 +272,11 @@ public class Vehicle extends GameObject
     {
          if(nextRoad.getStartInt().equals(nextInt))
          {
-             target = nextRoad.getFS();
+             target = nextRoad.getFS().copy();
          }
          else
          {
-             target = nextRoad.getBS();
+             target = nextRoad.getBS().copy();
          }
     }
 
@@ -314,7 +325,7 @@ public class Vehicle extends GameObject
     public void moveUp(double amount)
     {
         center.y -= amount;
-        //target.y -= amount;
+        target.y -= amount;
         AffineTransform move = new AffineTransform();
         move.translate(0, -amount);
         hitbox = move.createTransformedShape(hitbox);
@@ -322,7 +333,7 @@ public class Vehicle extends GameObject
     public void moveDown(double amount)
     {
         center.y += amount;
-        //target.y += amount;
+        target.y += amount;
         AffineTransform move = new AffineTransform();
         move.translate(0, amount);
         hitbox = move.createTransformedShape(hitbox);
@@ -330,7 +341,7 @@ public class Vehicle extends GameObject
     public void moveLeft(double amount)
     {
         center.x -= amount;
-        //target.x -= amount;
+        target.x -= amount;
         AffineTransform move = new AffineTransform();
         move.translate(-amount, 0);
         hitbox = move.createTransformedShape(hitbox);
@@ -338,7 +349,7 @@ public class Vehicle extends GameObject
     public void moveRight(double amount)
     {
         center.x += amount;
-        //target.x += amount;
+        target.x += amount;
         AffineTransform move = new AffineTransform();
         move.translate(amount, 0);
         hitbox = move.createTransformedShape(hitbox);
