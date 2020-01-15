@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 public class Vehicle extends GameObject
@@ -58,7 +59,7 @@ public class Vehicle extends GameObject
         isOnRoad = true;
         this.updateNextIntersection();
         aggression = inputAggression;
-        curSpeed = 2;
+        curSpeed = 0.5;
         this.updateTarget();
 
     }
@@ -114,8 +115,8 @@ public class Vehicle extends GameObject
                 this.moveX(target.x - center.x);
                 this.moveY(target.y - center.y);
 
-                isOnRoad = !isOnRoad;
-                this.updateTarget();
+                //isOnRoad = !isOnRoad;
+                //this.updateTarget();
             }
             // Otherwise, keep going toward it
             else
@@ -130,7 +131,14 @@ public class Vehicle extends GameObject
     public void render(Graphics2D g2d)
     {
         g2d.setColor(color);
-        g2d.fillOval((int)center.x, (int)center.y, 5, 5);
+        g2d.fill(hitbox);
+
+        g2d.setColor(Color.blue);
+        Shape dot = new Ellipse2D.Double(curRoad.getCenter().x-4, curRoad.getCenter().y-4, 8, 8);
+        g2d.fill(dot);
+        g2d.setColor(Color.green);
+        dot = new Ellipse2D.Double(nextInt.getCenter().x-4, nextInt.getCenter().y-4, 8, 8);
+        g2d.fill(dot);
     }
 
     // ==========================================
@@ -141,7 +149,7 @@ public class Vehicle extends GameObject
     public void makeHitbox()
     {
         hitbox = new Rectangle2D.Double(center.x - xWidth/2, center.y - yWidth/2, xWidth, yWidth);
-        rotateTransform.rotate(angle);
+        rotateTransform.rotate(angle, center.x, center.y);
         hitbox = rotateTransform.createTransformedShape(hitbox);
     }
 
@@ -244,7 +252,8 @@ public class Vehicle extends GameObject
     public void updateAngleAndSpeed()
     {
         double newAngle = center.angleToOtherPoint(target);
-        rotateTransform.rotate(newAngle - angle);
+        rotateTransform = new AffineTransform();
+        rotateTransform.rotate(newAngle - angle, center.x, center.y);
         hitbox = rotateTransform.createTransformedShape(hitbox);
         angle = newAngle;
         this.updateVelocityComponents();
@@ -277,7 +286,7 @@ public class Vehicle extends GameObject
     public void moveUp(double amount)
     {
         center.y -= amount;
-        target.y -= amount;
+        //target.y -= amount;
         AffineTransform move = new AffineTransform();
         move.translate(0, -amount);
         hitbox = move.createTransformedShape(hitbox);
@@ -285,7 +294,7 @@ public class Vehicle extends GameObject
     public void moveDown(double amount)
     {
         center.y += amount;
-        target.y += amount;
+        //target.y += amount;
         AffineTransform move = new AffineTransform();
         move.translate(0, amount);
         hitbox = move.createTransformedShape(hitbox);
@@ -293,7 +302,7 @@ public class Vehicle extends GameObject
     public void moveLeft(double amount)
     {
         center.x -= amount;
-        target.x -= amount;
+        //target.x -= amount;
         AffineTransform move = new AffineTransform();
         move.translate(-amount, 0);
         hitbox = move.createTransformedShape(hitbox);
@@ -301,7 +310,7 @@ public class Vehicle extends GameObject
     public void moveRight(double amount)
     {
         center.x += amount;
-        target.x += amount;
+        //target.x += amount;
         AffineTransform move = new AffineTransform();
         move.translate(amount, 0);
         hitbox = move.createTransformedShape(hitbox);
