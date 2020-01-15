@@ -184,8 +184,8 @@ public class Road extends GameObject
     {
         fs = Point.midPoint(startRight, startInt.getCenter());
         fe = Point.midPoint(endRight, endInt.getCenter());
-        bs = Point.midPoint(startLeft, startInt.getCenter());
-        be = Point.midPoint(endLeft, endInt.getCenter());
+        be = Point.midPoint(startLeft, startInt.getCenter());
+        bs = Point.midPoint(endLeft, endInt.getCenter());
     }
 
     // ==========================================
