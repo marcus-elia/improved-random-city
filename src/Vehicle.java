@@ -147,22 +147,6 @@ public class Vehicle extends GameObject
             g2d.setColor(color);
         }
         g2d.fill(hitbox);
-
-        g2d.setColor(Color.blue);
-        Shape dot = new Ellipse2D.Double(curRoad.getCenter().x-4, curRoad.getCenter().y-4, 8, 8);
-        g2d.fill(dot);
-        g2d.setColor(Color.green);
-        dot = new Ellipse2D.Double(nextInt.getCenter().x-4, nextInt.getCenter().y-4, 8, 8);
-        g2d.fill(dot);
-        if(nextRoad != null)
-        {
-            g2d.setColor(Color.orange);
-            dot = new Ellipse2D.Double(nextRoad.getCenter().x-4, nextRoad.getCenter().y-4, 8, 8);
-            g2d.fill(dot);
-        }
-        g2d.setColor(Color.CYAN);
-        dot = new Ellipse2D.Double(target.x-4, target.y-4, 8, 8);
-        g2d.fill(dot);
     }
 
     // ==========================================
@@ -353,5 +337,25 @@ public class Vehicle extends GameObject
         AffineTransform move = new AffineTransform();
         move.translate(amount, 0);
         hitbox = move.createTransformedShape(hitbox);
+    }
+
+    // Draw points based on where the Vehicle is going
+    public void debugDraw(Graphics2D g2d)
+    {
+        g2d.setColor(Color.blue);
+        Shape dot = new Ellipse2D.Double(curRoad.getCenter().x-4, curRoad.getCenter().y-4, 8, 8);
+        g2d.fill(dot);
+        g2d.setColor(Color.green);
+        dot = new Ellipse2D.Double(nextInt.getCenter().x-4, nextInt.getCenter().y-4, 8, 8);
+        g2d.fill(dot);
+        if(nextRoad != null)
+        {
+            g2d.setColor(Color.orange);
+            dot = new Ellipse2D.Double(nextRoad.getCenter().x-4, nextRoad.getCenter().y-4, 8, 8);
+            g2d.fill(dot);
+        }
+        g2d.setColor(Color.CYAN);
+        dot = new Ellipse2D.Double(target.x-4, target.y-4, 8, 8);
+        g2d.fill(dot);
     }
 }

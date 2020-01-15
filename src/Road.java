@@ -82,7 +82,7 @@ public class Road extends GameObject
         g2d.fill(rectangle);
         g2d.setColor(Color.YELLOW);
         g2d.draw(centerStripe);
-        drawDrivingPoints(g2d);
+        //drawDrivingPoints(g2d);
     }
 
     // ==========================================
