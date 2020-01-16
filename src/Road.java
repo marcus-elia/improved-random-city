@@ -449,6 +449,17 @@ public class Road extends GameObject
         return 0;
     }
 
+
+    // ==========================================
+    //
+    //            Graph Traversal
+    //
+    // ==========================================
+    public boolean goesBetweenIntersections(Intersection intsec1, Intersection intsec2)
+    {
+        return (startInt.equals(intsec1) && endInt.equals(intsec2)) || (startInt.equals(intsec2) && endInt.equals(intsec1));
+    }
+
     // ==========================================
     //
     //           Scrolling Functions
