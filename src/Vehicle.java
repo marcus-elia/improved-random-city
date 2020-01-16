@@ -238,6 +238,10 @@ public class Vehicle extends GameObject
     {
         return needsToBeRemoved;
     }
+    public Intersection getNextInt()
+    {
+        return nextInt;
+    }
 
 
     // ==========================================
