@@ -555,7 +555,35 @@ public class RoadMap extends GameObject
     {
         Road r = this.getRandomRoad();
         Point spawnPoint = Point.midPoint(Point.midPoint(r.getFS(), r.getFE()), r.getFS());
-        Vehicle v = new Vehicle(manager, spawnPoint, 16, 8, Color.red, r, 0.5);
+        double randomPersonality = Math.random();
+        Color color;
+        double aggression;
+        if(randomPersonality < 0.2) // yellow
+        {
+            color = new Color(255, 210, 31);
+            aggression = 0;
+        }
+        else if(randomPersonality < 0.4)  // light green
+        {
+            color = new Color(42, 247, 69);
+            aggression = 0.25;
+        }
+        else if(randomPersonality < 0.6)  // purple
+        {
+            color = new Color(204, 75, 227);
+            aggression = 0.5;
+        }
+        else if(randomPersonality < 0.8)  // blue
+        {
+            color = new Color(10, 62, 166);
+            aggression = 0.75;
+        }
+        else  // red
+        {
+            color = new Color(219, 49, 2);
+            aggression = 1;
+        }
+        Vehicle v = new Vehicle(manager, spawnPoint, 16, 8, color, r, aggression);
         this.addVehicle(v);
     }
 
