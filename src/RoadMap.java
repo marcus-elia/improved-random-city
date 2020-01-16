@@ -97,7 +97,7 @@ public class RoadMap extends GameObject
 
         averageLakeSize = 140;
 
-        carsPerRoad = 0.1;
+        carsPerRoad = 0.15;
 
         this.makeFirstIntersection();
     }
@@ -550,7 +550,7 @@ public class RoadMap extends GameObject
         return roads.get((int)(Math.random()*roads.size()));
     }
 
-
+    // This creates a new Vehicle on a random Road, and gives the Vehicle random characteristics.
     public void createNewVehicle()
     {
         Road r = this.getRandomRoad();
@@ -563,14 +563,14 @@ public class RoadMap extends GameObject
             color = new Color(255, 210, 31);
             aggression = 0;
         }
-        else if(randomPersonality < 0.4)  // light green
+        else if(randomPersonality < 0.4)  // green
         {
-            color = new Color(42, 247, 69);
+            color = new Color(10, 150, 20);
             aggression = 0.25;
         }
         else if(randomPersonality < 0.6)  // purple
         {
-            color = new Color(204, 75, 227);
+            color = new Color(124, 20, 127);
             aggression = 0.5;
         }
         else if(randomPersonality < 0.8)  // blue
@@ -580,7 +580,7 @@ public class RoadMap extends GameObject
         }
         else  // red
         {
-            color = new Color(219, 49, 2);
+            color = new Color(150, 10, 3);
             aggression = 1;
         }
         Vehicle v = new Vehicle(manager, spawnPoint, 16, 8, color, r, aggression);
