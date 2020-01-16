@@ -3,6 +3,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public class Vehicle extends GameObject
 {
@@ -37,6 +38,7 @@ public class Vehicle extends GameObject
     private double aggression;
     private Road curRoad, nextRoad;
     private Intersection nextInt;
+    private ArrayList<Road> pathToIntersection;
     private boolean isGoingForward; // relative to curRoad, are we going forward?
     private boolean isOnRoad;       // are we on a road, versus in an intersection?
     private boolean isStuck;        // are we on a dead end road?
@@ -63,6 +65,7 @@ public class Vehicle extends GameObject
         curRoad = inputCurRoad;
         isGoingForward = true;
         isOnRoad = true;
+        pathToIntersection = new ArrayList<Road>();
         this.updateNextIntersection();
         aggression = inputAggression;
         initializeCharacteristicsBasedOnAggression();
@@ -247,6 +250,10 @@ public class Vehicle extends GameObject
         isFading = input;
     }
 
+    public void setPathToIntersection(ArrayList<Road> input)
+    {
+        pathToIntersection = input;
+    }
     // ==========================================
     //
     //          Movement and Behavior
