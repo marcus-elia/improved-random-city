@@ -202,10 +202,11 @@ public class Vehicle extends GameObject
         }
     }
 
+    // More aggressive cars go faster and don't stop as long
     public void initializeCharacteristicsBasedOnAggression()
     {
         normalStopTime = (int)(aggression * 100);
-        curSpeed = 0.8 * aggression;
+        curSpeed = 0.75 * aggression + 0.2;
     }
 
 
