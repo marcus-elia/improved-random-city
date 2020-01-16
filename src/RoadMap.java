@@ -120,6 +120,8 @@ public class RoadMap extends GameObject
             ticksSinceLastBuild = 0;
         }
 
+        this.checkForCollisions();
+
         // if we don't have too many vehicles, make a new one
         if(vehicles.size() < (roads.size()-3)*this.carsPerRoad)
         {
@@ -138,9 +140,18 @@ public class RoadMap extends GameObject
         {
             intsec.tick();
         }
+        ArrayList<Vehicle> toRemove = new ArrayList<Vehicle>();
         for(Vehicle v : vehicles)
         {
             v.tick();
+            if(v.getNeedsToBeRemoved())
+            {
+                toRemove.add(v);
+            }
+        }
+        for(Vehicle gone : toRemove)
+        {
+            gone.removeSelf();
         }
     }
 
@@ -548,6 +559,33 @@ public class RoadMap extends GameObject
         this.addVehicle(v);
     }
 
+    // ==========================================
+    //
+    //             Game Management
+    //
+    // ==========================================
+    public void checkForCollisions()
+    {
+        for(int i = 0; i < vehicles.size() - 1; i++)
+        {
+            for(int j = i + 1; j < vehicles.size(); j++)
+            {
+                if(vehicles.get(i).getCenter().distanceToPoint(vehicles.get(j).getCenter()) < 25 &&
+                vehicles.get(i).isColliding(vehicles.get(j)))
+                {
+                    vehicles.get(i).setIsFading(true);
+                    vehicles.get(j).setIsFading(true);
+                }
+            }
+        }
+    }
+
+
+    // ==========================================
+    //
+    //                 Debug
+    //
+    // ==========================================
     // Iterates through all pairs of roads to see if any intersections happen.
     public void checkAllRoadsAndPrint()
     {
