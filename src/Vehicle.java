@@ -47,6 +47,7 @@ public class Vehicle extends GameObject
 
     private boolean isFading;
     private int fadeTicks;
+    private boolean needsToBeRemoved;
 
 
     public Vehicle(GameManager inputManager, Point inputCenter, double inputXWidth, double inputYWidth, Color inputColor,
@@ -71,6 +72,7 @@ public class Vehicle extends GameObject
 
         isFading = false;
         fadeTicks = 0;
+        needsToBeRemoved = false;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class Vehicle extends GameObject
             color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 256 - fadeTicks);
             if(fadeTicks == 256)
             {
-                this.removeSelf();
+                needsToBeRemoved = true;
             }
         }
         // First, check if we are at the target
@@ -219,7 +221,10 @@ public class Vehicle extends GameObject
     {
         return angle;
     }
-
+    public boolean getNeedsToBeRemoved()
+    {
+        return needsToBeRemoved;
+    }
 
 
     // ==========================================
