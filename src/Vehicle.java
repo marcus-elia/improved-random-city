@@ -44,6 +44,9 @@ public class Vehicle extends GameObject
     private int stoppedTime;
     private int normalStopTime;     // how long we stop at an intersection
 
+    private boolean isFading;
+    private int fadeTicks;
+
 
     public Vehicle(GameManager inputManager, Point inputCenter, double inputXWidth, double inputYWidth, Color inputColor,
                    Road inputCurRoad, double inputAggression)
@@ -64,11 +67,24 @@ public class Vehicle extends GameObject
         curSpeed = 0.5;
         this.initializeTarget();
         this.updateAngleAndSpeed();
+
+        isFading = false;
+        fadeTicks = 0;
     }
 
     @Override
     public void tick()
     {
+        // If the Vehicle is fading away
+        if(isFading)
+        {
+            fadeTicks++;
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 256 - fadeTicks);
+            if(fadeTicks == 256)
+            {
+                this.removeSelf();
+            }
+        }
         // First, check if we are at the target
         if(center.distanceToPoint(target) < 0.001)
         {
@@ -178,6 +194,30 @@ public class Vehicle extends GameObject
             this.updateNextIntersection();
             this.updateTargetOnRoad();
         }
+    }
+
+
+    // ==========================================
+    //
+    //                 Getters
+    //
+    // ==========================================
+    public Shape getHitbox()
+    {
+        return hitbox;
+    }
+
+
+
+
+    // ==========================================
+    //
+    //                 Getters
+    //
+    // ==========================================
+    public void setIsFading(boolean input)
+    {
+        isFading = input;
     }
 
     // ==========================================
@@ -301,6 +341,24 @@ public class Vehicle extends GameObject
         AffineTransform move = new AffineTransform();
         move.translate(0, amount);
         hitbox = move.createTransformedShape(hitbox);
+    }
+
+
+
+    // ==========================================
+    //
+    //         Collisions and Removing
+    //
+    // ==========================================
+    public boolean isColliding(Vehicle v)
+    {
+        return v.getHitbox().intersects((Rectangle2D) hitbox);
+    }
+
+    public void removeSelf()
+    {
+        this.manager.getGameObjects().remove(this);
+        this.manager.getRM().getVehicles().remove(this);
     }
 
 
