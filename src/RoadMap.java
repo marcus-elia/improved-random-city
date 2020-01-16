@@ -13,6 +13,7 @@ public class RoadMap extends GameObject
     private ArrayList<Road> roads;
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Lake> lakes;
+    private IntersectionGraph intGraph;
 
     // ==========================================
     //
@@ -75,6 +76,7 @@ public class RoadMap extends GameObject
         roads = new ArrayList<Road>();
         vehicles = new ArrayList<Vehicle>();
         lakes = new ArrayList<Lake>();
+        intGraph = new IntersectionGraph();
 
         // Initialize parameters
         numRoads = 0;
@@ -238,6 +240,8 @@ public class RoadMap extends GameObject
         {
             currentRadius = (int)intsec.getCenter().distanceToPoint(cityCenter);
         }
+
+        intGraph.addNode(intsec);
     }
     public void addLake(Lake l)
     {
@@ -251,6 +255,7 @@ public class RoadMap extends GameObject
         // The relevant intersections need to add the road
         r.getStartInt().addRoad(r, true);
         r.getEndInt().addRoad(r, false);
+        intGraph.addEdge(r.getStartInt(), r.getEndInt());
     }
     public void addVehicle(Vehicle v)
     {
@@ -607,6 +612,8 @@ public class RoadMap extends GameObject
             }
         }
     }
+
+
 
 
     // ==========================================
