@@ -305,7 +305,15 @@ public class Vehicle extends GameObject
         {
             target = curRoad.getBE().copy();
         }
-        nextRoad = nextInt.getRandomRoadExcept(curRoad);
+        if(!this.pathToIntersection.isEmpty())
+        {
+            nextRoad = pathToIntersection.get(0);
+            pathToIntersection.remove(0);
+        }
+        else
+        {
+            nextRoad = nextInt.getRandomRoadExcept(curRoad);
+        }
     }
 
     // When the Vehicle leaves an Intersection and starts driving on a new Road, this sets
