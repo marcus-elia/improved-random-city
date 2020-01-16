@@ -370,13 +370,13 @@ public class Vehicle extends GameObject
     // Wrapper function
     public boolean isColliding(Vehicle v)
     {
-        return Vehicle.areColliding(hitbox, v.getCenter(), v.getXWidth(), v.getYWidth(), v.getAngle());
-
+        //return Vehicle.areColliding(hitbox, v.getCenter(), v.getXWidth(), v.getYWidth(), v.getAngle());
+        return center.distanceToPoint(v.getCenter()) < yWidth;
     }
 
     // If any one of the 4 corners of the rectangle determined by c, xWidth, yWidth, and angle lies within
     // rec, return true
-    public static boolean areColliding(Shape rec, Point c, double xWidth, double yWidth, double angle)
+    /*public static boolean areColliding(Shape rec, Point c, double xWidth, double yWidth, double angle)
     {
         Point currentCorner;
         // Bottom right corner
@@ -406,7 +406,7 @@ public class Vehicle extends GameObject
         // If we didn't find any overlapping corners, we say that the rectangles are not
         // colliding
         return false;
-    }
+    }*/
 
     public void removeSelf()
     {
