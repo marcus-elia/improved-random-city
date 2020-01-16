@@ -104,6 +104,10 @@ public class Vehicle extends GameObject
                     updateTargetOnRoad(); // Now target the end of the Road
                     updateAngleAndSpeed();
                 }
+                if(stuckTime == 1000)
+                {
+                    this.setIsFading(true);
+                }
             }
             // If we have just gotten to the end of the Road, which is the start of the
             // new Intersection
