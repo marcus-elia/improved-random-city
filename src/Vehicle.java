@@ -65,8 +65,7 @@ public class Vehicle extends GameObject
         isOnRoad = true;
         this.updateNextIntersection();
         aggression = inputAggression;
-        normalStopTime = (int)(aggression * 100);
-        curSpeed = 0.5;
+        initializeCharacteristicsBasedOnAggression();
         this.initializeTarget();
         this.updateAngleAndSpeed();
 
@@ -201,6 +200,12 @@ public class Vehicle extends GameObject
             this.updateNextIntersection();
             this.updateTargetOnRoad();
         }
+    }
+
+    public void initializeCharacteristicsBasedOnAggression()
+    {
+        normalStopTime = (int)(aggression * 100);
+        curSpeed = 0.8 * aggression;
     }
 
 
