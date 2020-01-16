@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class Vehicle extends GameObject
@@ -206,13 +207,24 @@ public class Vehicle extends GameObject
     {
         return hitbox;
     }
-
+    public double getXWidth()
+    {
+        return xWidth;
+    }
+    public double getYWidth()
+    {
+        return yWidth;
+    }
+    public double getAngle()
+    {
+        return angle;
+    }
 
 
 
     // ==========================================
     //
-    //                 Getters
+    //                 Setters
     //
     // ==========================================
     public void setIsFading(boolean input)
@@ -350,9 +362,45 @@ public class Vehicle extends GameObject
     //         Collisions and Removing
     //
     // ==========================================
+    // Wrapper function
     public boolean isColliding(Vehicle v)
     {
-        return v.getHitbox().intersects((Rectangle2D) hitbox);
+        return Vehicle.areColliding(hitbox, v.getCenter(), v.getXWidth(), v.getYWidth(), v.getAngle());
+
+    }
+
+    // If any one of the 4 corners of the rectangle determined by c, xWidth, yWidth, and angle lies within
+    // rec, return true
+    public static boolean areColliding(Shape rec, Point c, double xWidth, double yWidth, double angle)
+    {
+        Point currentCorner;
+        // Bottom right corner
+        currentCorner = new Point(c.x + xWidth, c.y + yWidth);
+        currentCorner = c.rotateAroundThis(currentCorner, angle);
+        if(rec.contains(new Point2D.Double(currentCorner.x, currentCorner.y)))
+        {
+            return true;
+        }
+
+        // Top left corner
+        currentCorner = new Point(c.x - xWidth, c.y - yWidth);
+        currentCorner = c.rotateAroundThis(currentCorner, angle);
+        if(rec.contains(new Point2D.Double(currentCorner.x, currentCorner.y)))
+        {
+            return true;
+        }
+
+        // Top right corner
+        currentCorner = new Point(c.x + xWidth, c.y - yWidth);
+        currentCorner = c.rotateAroundThis(currentCorner, angle);
+        if(rec.contains(new Point2D.Double(currentCorner.x, currentCorner.y)))
+        {
+            return true;
+        }
+
+        // If we didn't find any overlapping corners, we say that the rectangles are not
+        // colliding
+        return false;
     }
 
     public void removeSelf()
