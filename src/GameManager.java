@@ -82,6 +82,10 @@ public class GameManager
     {
         return this.rm;
     }
+    public ArrayList<GameObject> getGameObjects()
+    {
+        return gameObjects;
+    }
 
     // ==========================================
     //
