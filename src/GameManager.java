@@ -246,6 +246,14 @@ public class GameManager
         }
     }
 
+    public void reactToMotion(int mx, int my)
+    {
+        if(!gameHasStarted)
+        {
+            startButton.reactToMouseMovement(mx, my);
+        }
+    }
+
 
 
 
