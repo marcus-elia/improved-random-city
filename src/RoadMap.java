@@ -61,6 +61,8 @@ public class RoadMap extends GameObject
     // Controls the density of Vehicles
     private double carsPerRoad;
 
+    private int maxNumberOfRoads;
+
     // ==========================================
     //
     //             City Properties
@@ -73,7 +75,7 @@ public class RoadMap extends GameObject
     // The farthest distance from the center that has been built
     private int currentRadius;
 
-    public RoadMap(GameManager inputManager, Point inputCenter, double inputLakeFrequency)
+    public RoadMap(GameManager inputManager, Point inputCenter, double inputLakeFrequency, int inputMaxNumberOfRoads)
     {
         // Initialize Lists
         super(inputManager, inputCenter);
@@ -109,6 +111,8 @@ public class RoadMap extends GameObject
 
         carsPerRoad = 0.18;
 
+        maxNumberOfRoads = inputMaxNumberOfRoads;
+
         this.makeFirstIntersection();
     }
 
@@ -117,7 +121,7 @@ public class RoadMap extends GameObject
         ticksSinceLastBuild++;
 
         // If it's time to try to build a new road
-        if(ticksSinceLastBuild == ticksBetweenBuilds)
+        if(ticksSinceLastBuild == ticksBetweenBuilds && roads.size() < maxNumberOfRoads)
         {
             if(Math.random() > this.lakeFrequency)
             {
