@@ -276,7 +276,20 @@ public class Vehicle extends GameObject
 
     public void setPathToIntersection(ArrayList<Road> input)
     {
+        // Don't try to go anywhere if stuck
+        if(isStuck)
+        {
+            return;
+        }
+
         pathToIntersection = input;
+
+        // If we are on a road, replace the nextRoad (which was already set)
+        if(isOnRoad && !input.isEmpty())
+        {
+            nextRoad = input.get(0);
+            pathToIntersection.remove(0);
+        }
     }
     // ==========================================
     //
