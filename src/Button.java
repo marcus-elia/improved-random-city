@@ -4,16 +4,16 @@ import java.awt.geom.Rectangle2D;
 
 public class Button
 {
-    private boolean isHighlighted;
-    private Point center;
-    private double xWidth;
-    private double yWidth;
-    private Shape rectangle;
-    private ButtonOutput output;
-    private GameManager manager;
-    private Color normalColor, highlightedColor;
-    private String word;
-    private int fontSize;
+    protected boolean isHighlighted;
+    protected Point center;
+    protected double xWidth;
+    protected double yWidth;
+    protected Shape rectangle;
+    protected ButtonOutput output;
+    protected GameManager manager;
+    protected Color normalColor, highlightedColor;
+    protected String word;
+    protected int fontSize;
 
     public Button(GameManager inputManager, Point inputCenter,  double inputXWidth, double inputYWidth,
                   Color inputNormalColor, String inputWord, int inputFontSize, ButtonOutput inputOutput)
