@@ -24,6 +24,7 @@ public class Vehicle extends GameObject
     //
     // ==========================================
     private double angle;
+    private double normalSpeed;
     private double curSpeed;
     private double maxSpeed;
     private double acceleration;
@@ -135,7 +136,7 @@ public class Vehicle extends GameObject
         {
             isStopped = true;
             // If the intersection only has two roads, don't stop at all
-            if(nextInt.getRoads().size() == 2)
+            if(nextInt.getRoads().size() == 2 || !pathToIntersection.isEmpty())
             {
                 stoppedTime = normalStopTime - 1;
             }
@@ -209,7 +210,9 @@ public class Vehicle extends GameObject
     public void initializeCharacteristicsBasedOnAggression()
     {
         normalStopTime = 120 - (int)(aggression * 100);
-        curSpeed = 0.75 * aggression + 0.35;
+        normalSpeed = 0.75 * aggression + 0.35;
+        curSpeed = normalSpeed;
+        maxSpeed = 2*normalSpeed;
     }
 
 
@@ -289,6 +292,7 @@ public class Vehicle extends GameObject
         {
             nextRoad = input.get(0);
             pathToIntersection.remove(0);
+            curSpeed = maxSpeed;
         }
     }
     // ==========================================
@@ -346,10 +350,12 @@ public class Vehicle extends GameObject
         {
             nextRoad = pathToIntersection.get(0);
             pathToIntersection.remove(0);
+            curSpeed = maxSpeed;
         }
         else
         {
             nextRoad = nextInt.getRandomRoadExcept(curRoad);
+            curSpeed = normalSpeed;
         }
     }
 
