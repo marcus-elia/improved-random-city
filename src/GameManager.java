@@ -13,6 +13,8 @@ public class GameManager
     private double diagonalScrollSpeed;
     private ScrollDirection scrollDirection;
 
+    private boolean gameHasStarted;
+
 
 
     // ==========================================
@@ -31,26 +33,46 @@ public class GameManager
         scrollSpeed = 5;
         diagonalScrollSpeed = scrollSpeed / Math.sqrt(2);
 
-        gameObjects = new ArrayList<GameObject>();
-        rm = new RoadMap(this, new Point(0,0));
-        gameObjects.add(rm);
+        gameHasStarted = false;
+
     }
 
     public void tick()
     {
-         if(isScrolling)
-         {
-             this.scroll();
-         }
-         else
-         {
-             rm.tick();
-         }
+        if(gameHasStarted)
+        {
+            if(isScrolling)
+            {
+                this.scroll();
+            }
+            else
+            {
+                rm.tick();
+            }
+        }
     }
 
     public void render(Graphics2D g2d)
     {
-        rm.render(g2d);
+        if(gameHasStarted)
+        {
+            rm.render(g2d);
+        }
+    }
+
+
+    // ==========================================
+    //
+    //          Initialization Functions
+    //
+    // ==========================================
+    public void startGame()
+    {
+        gameHasStarted = true;
+
+        gameObjects = new ArrayList<GameObject>();
+        rm = new RoadMap(this, new Point(0,0));
+        gameObjects.add(rm);
     }
 
     // ==========================================
@@ -85,6 +107,10 @@ public class GameManager
     public ArrayList<GameObject> getGameObjects()
     {
         return gameObjects;
+    }
+    public boolean getGameHasStarted()
+    {
+        return gameHasStarted;
     }
 
     // ==========================================
