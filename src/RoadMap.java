@@ -75,7 +75,8 @@ public class RoadMap extends GameObject
     // The farthest distance from the center that has been built
     private int currentRadius;
 
-    public RoadMap(GameManager inputManager, Point inputCenter, double inputLakeFrequency, int inputMaxNumberOfRoads)
+    public RoadMap(GameManager inputManager, Point inputCenter, double inputLakeFrequency, int inputMaxNumberOfRoads,
+                   double inputCarsPerRoad)
     {
         // Initialize Lists
         super(inputManager, inputCenter);
@@ -109,7 +110,7 @@ public class RoadMap extends GameObject
         averageLakeSize = 140;
         lakeFrequency = inputLakeFrequency;
 
-        carsPerRoad = 0.18;
+        carsPerRoad = inputCarsPerRoad;
 
         maxNumberOfRoads = inputMaxNumberOfRoads;
 
