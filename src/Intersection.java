@@ -106,6 +106,10 @@ public class Intersection extends GameObject
     {
         return averageRoadLength;
     }
+    public Shape getIntersectionFill()
+    {
+        return intersectionFill;
+    }
 
     // ==========================================
     //
