@@ -97,13 +97,13 @@ public class RoadMap extends GameObject
 
         roadDensityMap = new PerlinNoise(64, 64, 0.2);
 
-        intersectionLockOnDistance = 15;
+        intersectionLockOnDistance = 18;
 
         minIntersectionDistance = 40;
 
         averageLakeSize = 140;
 
-        carsPerRoad = 0.15;
+        carsPerRoad = 0.18;
 
         this.makeFirstIntersection();
     }
