@@ -227,7 +227,7 @@ public class RoadMap extends GameObject
 
     // ==========================================
     //
-    //               Setters
+    //                Setters
     //
     // ==========================================
     public void addIntersection(Intersection intsec)
@@ -613,7 +613,30 @@ public class RoadMap extends GameObject
         }
     }
 
+    // ==========================================
+    //
+    //           Intersection Graph
+    //
+    // ==========================================
+    public void makeAllCarsTargetIntersection(Intersection intsec)
+    {
+        for(Vehicle v : vehicles)
+        {
+            v.setPathToIntersection(intGraph.getShortestPath(v.getNextInt(), intsec));
+        }
+    }
 
+    public void respondToClick(int mx, int my)
+    {
+        for(Intersection intsec : intersections)
+        {
+            if(intsec.getIntersectionFill().contains(mx, my))
+            {
+                this.makeAllCarsTargetIntersection(intsec);
+                break;
+            }
+        }
+    }
 
 
     // ==========================================
