@@ -48,7 +48,7 @@ public class GameManager
                 3.0*width/4, height/8.0, Color.BLUE, "Start", 24, null);
         gameHasStarted = false;
         lakeFrequencyButtons = new LowMedHighButton(this, new Point(width/2.0, height/3.0),
-                30, 20, 20, Color.BLUE, "Lake Frequency");
+                100, 48, 40, Color.BLUE, "Lake Frequency");
         lakeFrequency = 0.1;
 
 

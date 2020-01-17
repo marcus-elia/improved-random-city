@@ -31,11 +31,11 @@ public class LowMedHighButton
     public void makeButtons()
     {
         low = new Button(manager, new Point(center.x - xWidth - distanceBetweenCenters, center.y), xWidth, yWidth,
-            color, "Low", 32, ButtonOutput.Low);
+            color, "Low", 24, ButtonOutput.Low);
         medium = new Button(manager, new Point(center.x, center.y), xWidth, yWidth,
-                color, "Medium", 32, ButtonOutput.Medium);
+                color, "Medium", 24, ButtonOutput.Medium);
         high = new Button(manager, new Point(center.x + xWidth + distanceBetweenCenters, center.y), xWidth, yWidth,
-                color, "High", 32, ButtonOutput.High);
+                color, "High", 24, ButtonOutput.High);
     }
 
     public void render(Graphics2D g2d)
@@ -49,7 +49,7 @@ public class LowMedHighButton
     // Draw the label above the medium button
     public void drawWord(Graphics2D g2d)
     {
-        g2d.setFont(new Font("Tahoma", Font.BOLD, 36));
+        g2d.setFont(new Font("Tahoma", Font.BOLD, 24));
         g2d.setColor(Color.WHITE);
         int pixelLength = g2d.getFontMetrics().stringWidth(label); // the number of pixels the string is long
         g2d.drawString(label, (int)center.x - pixelLength/2, (int)center.y  - (int)yWidth/2 - 20);
