@@ -652,7 +652,7 @@ public class RoadMap extends GameObject
     {
         for(Intersection intsec : intersections)
         {
-            if(intsec.getIntersectionFill().contains(p.x, p.y))
+            if(intsec.getIntersectionFill() != null && intsec.getIntersectionFill().contains(p.x, p.y))
             {
                 this.makeAllCarsTargetIntersection(intsec);
                 break;
