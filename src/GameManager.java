@@ -29,7 +29,7 @@ public class GameManager
     private double diagonalScrollSpeed;
     private ScrollDirection scrollDirection;
 
-
+    private String instructions1, instructions2;
 
 
     // ==========================================
@@ -61,7 +61,8 @@ public class GameManager
                 100, 30, 40, Color.GREEN, "Car Density");
         carsPerRoad = 0.18;
 
-
+        instructions1 = "Use the arrow keys to move around the city.";
+        instructions2 = "Click on an intersection to make the cars drive there.";
     }
 
     public void tick()
@@ -92,6 +93,17 @@ public class GameManager
             maxRoadsButtons.render(g2d);
             carsPerRoadButtons.render(g2d);
         }
+        this.drawInstructions(g2d);
+    }
+
+    public void drawInstructions(Graphics2D g2d)
+    {
+        g2d.setFont(new Font("Tahoma", Font.BOLD, 18));
+        g2d.setColor(Color.WHITE);
+        int pixelLength = g2d.getFontMetrics().stringWidth(instructions1); // the number of pixels the string is long
+        g2d.drawString(instructions1, (int)width/2 - pixelLength/2, (int)(2*height/3.0));
+        pixelLength = g2d.getFontMetrics().stringWidth(instructions2); // the number of pixels the string is long
+        g2d.drawString(instructions2, (int)width/2 - pixelLength/2, (int)(2*height/3.0) + 24);
     }
 
 
