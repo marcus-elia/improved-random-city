@@ -242,6 +242,26 @@ public class Vehicle extends GameObject
     {
         return nextInt;
     }
+    public boolean getIsOnRoad()
+    {
+        return isOnRoad;
+    }
+    public Intersection getNextNextInt()
+    {
+        if(!isOnRoad)
+        {
+            if(nextRoad.getStartInt().equals(nextInt))
+            {
+                return nextRoad.getEndInt();
+            }
+            else
+            {
+                return nextRoad.getStartInt();
+            }
+        }
+        System.out.println("Not currently in intersection. Do not call getNextNextInt()");
+        return null;
+    }
 
 
     // ==========================================
