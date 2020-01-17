@@ -55,6 +55,9 @@ public class RoadMap extends GameObject
     // The average size of the lakes' longer radius (lake is ellipse)
     private int averageLakeSize;
 
+    // 1 means we always build lake, 0 means we always build roads
+    private double lakeFrequency;
+
     // Controls the density of Vehicles
     private double carsPerRoad;
 
@@ -70,7 +73,7 @@ public class RoadMap extends GameObject
     // The farthest distance from the center that has been built
     private int currentRadius;
 
-    public RoadMap(GameManager inputManager, Point inputCenter)
+    public RoadMap(GameManager inputManager, Point inputCenter, double inputLakeFrequency)
     {
         // Initialize Lists
         super(inputManager, inputCenter);
@@ -102,6 +105,7 @@ public class RoadMap extends GameObject
         minIntersectionDistance = 40;
 
         averageLakeSize = 140;
+        lakeFrequency = inputLakeFrequency;
 
         carsPerRoad = 0.18;
 
@@ -115,7 +119,7 @@ public class RoadMap extends GameObject
         // If it's time to try to build a new road
         if(ticksSinceLastBuild == ticksBetweenBuilds)
         {
-            if(Math.random() > 0.025)
+            if(Math.random() > this.lakeFrequency)
             {
                 this.buildNewRoad();
             }
