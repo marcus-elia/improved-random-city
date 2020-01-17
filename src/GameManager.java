@@ -13,6 +13,8 @@ public class GameManager
     private boolean gameHasStarted;
     private LowMedHighButton lakeFrequencyButtons;
     private double lakeFrequency;
+    private LowMedHighButton maxRoadsButtons;
+    private int maxNumRoads;
 
 
     // The overall size of the window
@@ -48,8 +50,11 @@ public class GameManager
                 3.0*width/4, height/8.0, Color.BLUE, "Start", 24, null);
         gameHasStarted = false;
         lakeFrequencyButtons = new LowMedHighButton(this, new Point(width/2.0, height/3.0),
-                100, 48, 40, Color.BLUE, "Lake Frequency");
+                100, 30, 40, Color.BLUE, "Lake Frequency");
         lakeFrequency = 0.1;
+        maxRoadsButtons = new LowMedHighButton(this, new Point(width/2.0, height/6.0),
+                100, 30, 40, Color.RED, "Maximum City Size");
+        maxNumRoads = 500;
 
 
     }
@@ -79,6 +84,7 @@ public class GameManager
         {
             startButton.render(g2d);
             lakeFrequencyButtons.render(g2d);
+            maxRoadsButtons.render(g2d);
         }
     }
 
@@ -91,7 +97,7 @@ public class GameManager
     public void startGame()
     {
         gameObjects = new ArrayList<GameObject>();
-        rm = new RoadMap(this, new Point(0,0), lakeFrequency);
+        rm = new RoadMap(this, new Point(0,0), lakeFrequency, maxNumRoads);
         gameObjects.add(rm);
 
         gameHasStarted = true;
@@ -110,6 +116,22 @@ public class GameManager
         else
         {
             lakeFrequency = 0.5;
+        }
+    }
+
+    public void setMaxNumRoads(ButtonOutput bo)
+    {
+        if(bo == ButtonOutput.Low)
+        {
+            maxNumRoads = 50;
+        }
+        else if(bo == ButtonOutput.Medium)
+        {
+            maxNumRoads = 500;
+        }
+        else
+        {
+            maxNumRoads = 10000;
         }
     }
 
@@ -271,6 +293,10 @@ public class GameManager
             {
                 this.setLakeFrequency(lakeFrequencyButtons.reactToMouseClick(mx, my));
             }
+            if(maxRoadsButtons.reactToMouseClick(mx, my) != null)
+            {
+                this.setMaxNumRoads(maxRoadsButtons.reactToMouseClick(mx, my));
+            }
         }
     }
 
@@ -280,6 +306,7 @@ public class GameManager
         {
             startButton.reactToMouseMovement(mx, my);
             lakeFrequencyButtons.reactToMouseMovement(mx, my);
+            maxRoadsButtons.reactToMouseMovement(mx, my);
         }
     }
 
