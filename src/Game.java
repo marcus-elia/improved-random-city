@@ -20,7 +20,7 @@ public class Game extends Canvas implements Runnable
     {
         gameManager = new GameManager(WIDTH, HEIGHT);
         this.addKeyListener(new KeyInput(gameManager));
-        //this.addMouseMotionListener(new MouseMotionInput(gameManager));
+        this.addMouseMotionListener(new MouseMotionInput(gameManager));
         this.addMouseListener(new MouseInput(gameManager));
         new Window(WIDTH, HEIGHT, "Random City", this);
 
