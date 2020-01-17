@@ -3,6 +3,14 @@ import java.util.ArrayList;
 
 public class GameManager
 {
+    // ==========================================
+    //
+    //             Pregame Things
+    //
+    // ==========================================
+    private StartButton startButton;
+
+
     // The overall size of the window
     private int width;
     private int height;
@@ -33,6 +41,9 @@ public class GameManager
         scrollSpeed = 5;
         diagonalScrollSpeed = scrollSpeed / Math.sqrt(2);
 
+        startButton = new StartButton(this, new Point(width/2.0, 5.0*height/6),
+                3.0*width/4, height/8.0, Color.BLUE);
+
         gameHasStarted = false;
 
     }
@@ -58,6 +69,10 @@ public class GameManager
         {
             rm.render(g2d);
         }
+        else
+        {
+            startButton.render(g2d);
+        }
     }
 
 
@@ -68,11 +83,11 @@ public class GameManager
     // ==========================================
     public void startGame()
     {
-        gameHasStarted = true;
-
         gameObjects = new ArrayList<GameObject>();
         rm = new RoadMap(this, new Point(0,0));
         gameObjects.add(rm);
+
+        gameHasStarted = true;
     }
 
     // ==========================================
@@ -221,15 +236,14 @@ public class GameManager
     // Print debug stats about whatever object is closest to the click.
     public void reactToClick(int mx, int my)
     {
-        /*Point p = new Point(mx, my);
-        for(GameObject obj : gameObjects)
+        if(gameHasStarted)
         {
-            if(obj.getCenter().distanceToPoint(p) < 6)
-            {
-                obj.printThings();
-            }
-        }*/
-        rm.setNewClick(mx, my);
+            rm.setNewClick(mx, my);
+        }
+        else
+        {
+            startButton.reactToMouseClick(mx, my);
+        }
     }
 
 
