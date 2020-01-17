@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -9,6 +10,9 @@ public class GameManager
     //
     // ==========================================
     private StartButton startButton;
+    private boolean gameHasStarted;
+    private LowMedHighButton lakeFrequencyButtons;
+    private double lakeFrequency;
 
 
     // The overall size of the window
@@ -21,7 +25,6 @@ public class GameManager
     private double diagonalScrollSpeed;
     private ScrollDirection scrollDirection;
 
-    private boolean gameHasStarted;
 
 
 
@@ -42,9 +45,12 @@ public class GameManager
         diagonalScrollSpeed = scrollSpeed / Math.sqrt(2);
 
         startButton = new StartButton(this, new Point(width/2.0, 5.0*height/6),
-                3.0*width/4, height/8.0, Color.BLUE);
-
+                3.0*width/4, height/8.0, Color.BLUE, "Start", 24, null);
         gameHasStarted = false;
+        lakeFrequencyButtons = new LowMedHighButton(this, new Point(width/2.0, height/3.0),
+                30, 20, 20, Color.BLUE, "Lake Frequency");
+        lakeFrequency = 0.1;
+
 
     }
 
@@ -72,6 +78,7 @@ public class GameManager
         else
         {
             startButton.render(g2d);
+            lakeFrequencyButtons.render(g2d);
         }
     }
 
@@ -84,10 +91,26 @@ public class GameManager
     public void startGame()
     {
         gameObjects = new ArrayList<GameObject>();
-        rm = new RoadMap(this, new Point(0,0));
+        rm = new RoadMap(this, new Point(0,0), lakeFrequency);
         gameObjects.add(rm);
 
         gameHasStarted = true;
+    }
+
+    public void setLakeFrequency(ButtonOutput bo)
+    {
+        if(bo == ButtonOutput.Low)
+        {
+            lakeFrequency = 0.002;
+        }
+        else if(bo == ButtonOutput.Medium)
+        {
+            lakeFrequency = 0.1;
+        }
+        else
+        {
+            lakeFrequency = 0.5;
+        }
     }
 
     // ==========================================
@@ -243,6 +266,11 @@ public class GameManager
         else
         {
             startButton.reactToMouseClick(mx, my);
+
+            if(lakeFrequencyButtons.reactToMouseClick(mx, my) != null)
+            {
+                this.setLakeFrequency(lakeFrequencyButtons.reactToMouseClick(mx, my));
+            }
         }
     }
 
@@ -251,6 +279,7 @@ public class GameManager
         if(!gameHasStarted)
         {
             startButton.reactToMouseMovement(mx, my);
+            lakeFrequencyButtons.reactToMouseMovement(mx, my);
         }
     }
 
