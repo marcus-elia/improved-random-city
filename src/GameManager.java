@@ -203,7 +203,7 @@ public class GameManager
                 obj.printThings();
             }
         }*/
-        rm.respondToClick(mx, my);
+        rm.setNewClick(mx, my);
     }
 
 
