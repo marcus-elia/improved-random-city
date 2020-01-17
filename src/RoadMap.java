@@ -622,7 +622,15 @@ public class RoadMap extends GameObject
     {
         for(Vehicle v : vehicles)
         {
-            v.setPathToIntersection(intGraph.getShortestPath(v.getNextInt(), intsec));
+            if(v.getIsOnRoad())
+            {
+                v.setPathToIntersection(intGraph.getShortestPath(v.getNextInt(), intsec));
+            }
+            else
+            {
+                v.setPathToIntersection(intGraph.getShortestPath(v.getNextNextInt(), intsec));
+            }
+
         }
     }
 
