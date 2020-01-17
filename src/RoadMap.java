@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class RoadMap extends GameObject
 {
+    private Point newClick;
+
     // ==========================================
     //
     //            Lists of Objects
@@ -72,6 +74,8 @@ public class RoadMap extends GameObject
     {
         // Initialize Lists
         super(inputManager, inputCenter);
+        newClick = null;
+
         intersections = new ArrayList<Intersection>();
         roads = new ArrayList<Road>();
         vehicles = new ArrayList<Vehicle>();
@@ -154,6 +158,12 @@ public class RoadMap extends GameObject
         for(Vehicle gone : toRemove)
         {
             gone.removeSelf();
+        }
+
+        if(newClick != null)
+        {
+            this.respondToClick(newClick);
+            newClick = null;
         }
     }
 
@@ -263,6 +273,10 @@ public class RoadMap extends GameObject
         manager.addGameObject(v);
     }
 
+    public void setNewClick(int mx, int my)
+    {
+        newClick = new Point(mx, my);
+    }
 
 
     // ==========================================
@@ -634,11 +648,11 @@ public class RoadMap extends GameObject
         }
     }
 
-    public void respondToClick(int mx, int my)
+    public void respondToClick(Point p)
     {
         for(Intersection intsec : intersections)
         {
-            if(intsec.getIntersectionFill().contains(mx, my))
+            if(intsec.getIntersectionFill().contains(p.x, p.y))
             {
                 this.makeAllCarsTargetIntersection(intsec);
                 break;
