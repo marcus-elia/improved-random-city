@@ -1,5 +1,11 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GameManager
@@ -92,8 +98,8 @@ public class GameManager
             lakeFrequencyButtons.render(g2d);
             maxRoadsButtons.render(g2d);
             carsPerRoadButtons.render(g2d);
+            this.drawInstructions(g2d);
         }
-        this.drawInstructions(g2d);
     }
 
     public void drawInstructions(Graphics2D g2d)
@@ -118,6 +124,7 @@ public class GameManager
         rm = new RoadMap(this, new Point(0,0), lakeFrequency, maxNumRoads, carsPerRoad);
         gameObjects.add(rm);
 
+        playMusic("src\\music.wav"); // scroll down to see attribution for this code
         gameHasStarted = true;
     }
 
@@ -349,6 +356,34 @@ public class GameManager
         }
     }
 
+    // ==========================================
+    //
+    //                 Music
+    //
+    // ==========================================
+    // This code is from https://www.youtube.com/watch?v=TErboGLHZGA, a tutorial by Max O'Didily
+    public void playMusic(String musicLocation)
+    {
+        try
+        {
+            File musicPath = new File(musicLocation);
+            if(musicPath.exists())
+            {
+                AudioInputStream audioInput =  AudioSystem.getAudioInputStream(musicPath);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInput);
+                clip.start();
+            }
+            else
+            {
+                System.out.println("Can't find music file.");
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
 
 
